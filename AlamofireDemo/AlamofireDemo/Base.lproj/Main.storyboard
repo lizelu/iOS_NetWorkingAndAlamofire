@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="QL2-kG-3P7">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="AlamofireDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9RE-Bg-sQP">
+                                <rect key="frame" x="20" y="72" width="70" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="ELy-cd-45e"/>
+                                    <constraint firstAttribute="width" constant="70" id="HVn-K3-cI4"/>
+                                </constraints>
+                                <state key="normal" title="GET"/>
+                                <connections>
+                                    <action selector="tapGetButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Nqv-af-Yac"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lc5-as-s4Q">
+                                <rect key="frame" x="138" y="72" width="40" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="GlK-KM-J30"/>
+                                    <constraint firstAttribute="height" constant="30" id="Wzm-IU-KDn"/>
+                                </constraints>
+                                <state key="normal" title="POST"/>
+                                <connections>
+                                    <action selector="tapPostButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dNF-wg-vR2"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y4d-XL-63F">
+                                <rect key="frame" x="20" y="130" width="138" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="138" id="DoF-o4-YTf"/>
+                                    <constraint firstAttribute="height" constant="30" id="VNF-yO-rXi"/>
+                                </constraints>
+                                <state key="normal" title="NSURLSession_GET"/>
+                                <connections>
+                                    <action selector="tapSessionGetButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="2sU-Q8-vTA"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dpl-5r-c0h">
+                                <rect key="frame" x="20" y="168" width="151" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="151" id="F5M-Om-3eb"/>
+                                    <constraint firstAttribute="height" constant="30" id="XBa-vz-3sF"/>
+                                </constraints>
+                                <state key="normal" title="NSURLSession_POST"/>
+                                <connections>
+                                    <action selector="tapSessionPostButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8wE-3P-cpw"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oFK-j7-yQQ">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="god-4D-cr0"/>
+                                    <constraint firstAttribute="width" constant="181" id="sxe-X1-doc"/>
+                                </constraints>
+                                <state key="normal" title="NSURLSession_UploadFile"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="god-4D-cr0"/>
+                                        <exclude reference="sxe-X1-doc"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="god-4D-cr0"/>
+                                        <include reference="sxe-X1-doc"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="tapSessionUploadFileButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cgu-gg-Xtv"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="o0M-Dj-3HP">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="Imm-q6-LNc"/>
+                                    <constraint firstAttribute="width" constant="240" id="nxk-xO-O5y"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="Imm-q6-LNc"/>
+                                        <exclude reference="nxk-xO-O5y"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="Imm-q6-LNc"/>
+                                        <include reference="nxk-xO-O5y"/>
+                                    </mask>
+                                </variation>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="o0M-Dj-3HP" firstAttribute="top" secondItem="oFK-j7-yQQ" secondAttribute="bottom" constant="8" id="9US-nW-ZKp"/>
+                            <constraint firstItem="oFK-j7-yQQ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="CDY-Di-uMG"/>
+                            <constraint firstItem="9RE-Bg-sQP" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="I0b-VI-xBl"/>
+                            <constraint firstItem="9RE-Bg-sQP" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="Jn5-w2-XGE"/>
+                            <constraint firstItem="lc5-as-s4Q" firstAttribute="leading" secondItem="9RE-Bg-sQP" secondAttribute="trailing" constant="48" id="PHB-vn-Jhn"/>
+                            <constraint firstItem="dpl-5r-c0h" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="Vxn-v1-3i9"/>
+                            <constraint firstItem="y4d-XL-63F" firstAttribute="top" secondItem="9RE-Bg-sQP" secondAttribute="bottom" constant="28" id="XMF-hS-7bI"/>
+                            <constraint firstItem="o0M-Dj-3HP" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-5" id="bFo-c3-ksX"/>
+                            <constraint firstItem="oFK-j7-yQQ" firstAttribute="top" secondItem="dpl-5r-c0h" secondAttribute="bottom" constant="8" id="e2E-yv-k1Y"/>
+                            <constraint firstItem="lc5-as-s4Q" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="j0i-Or-7KE"/>
+                            <constraint firstItem="dpl-5r-c0h" firstAttribute="top" secondItem="y4d-XL-63F" secondAttribute="bottom" constant="8" id="qkw-MF-Nhe"/>
+                            <constraint firstItem="y4d-XL-63F" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="xtn-un-x9g"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="oFK-j7-yQQ"/>
+                                <exclude reference="o0M-Dj-3HP"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="CDY-Di-uMG"/>
+                                <exclude reference="e2E-yv-k1Y"/>
+                                <exclude reference="9US-nW-ZKp"/>
+                                <exclude reference="bFo-c3-ksX"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="oFK-j7-yQQ"/>
+                                <include reference="o0M-Dj-3HP"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="CDY-Di-uMG"/>
+                                <include reference="e2E-yv-k1Y"/>
+                                <include reference="9US-nW-ZKp"/>
+                                <include reference="bFo-c3-ksX"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <navigationItem key="navigationItem" id="MIN-Qs-q66"/>
+                    <connections>
+                        <outlet property="uploadImageView" destination="o0M-Dj-3HP" id="iKG-5N-fDN"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1266" y="65.25"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="wS8-oG-x0S">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="QL2-kG-3P7" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Yx1-UN-KqN">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="yFz-LH-okf"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Grx-RB-2GT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="625" y="-457"/>
+        </scene>
+    </scenes>
+</document>
