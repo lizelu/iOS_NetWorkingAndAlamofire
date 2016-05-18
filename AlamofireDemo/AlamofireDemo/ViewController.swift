@@ -424,6 +424,52 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
     }
     
     
+    /**
+     缓存策略：
+        UseProtocolCachePolicy -- 缓存存在就读缓存，若不存在就请求服务器
+        ReloadIgnoringLocalCacheData -- 忽略缓存，直接请求服务器数据
+        ReturnCacheDataElseLoad -- 本地如有缓存就使用，忽略其有效性，无则请求服务器
+        ReturnCacheDataDontLoad -- 直接加载本地缓存，没有也不请求网络
+        其他的缓存策略还未实现
+     
+     - parameter sender:
+     */
+    @IBAction func tapCatchButton(sender: AnyObject) {
+        
+        //let URLCatch: NSURLCache = URLCatch()
+        
+        //从网络下载图片
+        //let fileUrl: NSURL? = NSURL(string: "http://img.taopic.com/uploads/allimg/140326/235113-1403260I33562.jpg")
+        let fileUrl: NSURL? = NSURL(string: "http://www.cnblogs.com")
+        
+        let request: NSMutableURLRequest = NSMutableURLRequest(URL: fileUrl!)
+        
+        //1.使用request指定缓存策略
+        //request.cachePolicy = .UseProtocolCachePolicy
+        
+        //let session: NSURLSession = NSURLSession.sharedSession()
+        
+        //2.使用NSURLSessionConfiguration指定缓存策略
+        let sessionConfig: NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        sessionConfig.requestCachePolicy = .ReturnCacheDataElseLoad
+        
+        
+        let session: NSURLSession = NSURLSession(configuration: sessionConfig)
+        
+        let dataTask: NSURLSessionDataTask = session.dataTaskWithRequest(request) { (data, response, error) in
+            if data != nil {
+                
+                print(String.init(data: data!, encoding: NSUTF8StringEncoding))
+                dispatch_async(dispatch_get_main_queue()) {
+                    //self.downloadImageView.image = UIImage.init(data: data!)
+                }
+            }
+        }
+        dataTask.resume()
+        
+        
+    }
+    
     
     
     

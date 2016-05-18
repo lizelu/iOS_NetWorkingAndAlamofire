@@ -200,6 +200,29 @@
                                     <action selector="tapPauseButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qzA-iL-CRO"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rjw-a7-w7i">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="60" id="K0T-oz-SCc"/>
+                                    <constraint firstAttribute="height" constant="30" id="kWy-KP-DdQ"/>
+                                </constraints>
+                                <state key="normal" title="自动缓存"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="K0T-oz-SCc"/>
+                                        <exclude reference="kWy-KP-DdQ"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="K0T-oz-SCc"/>
+                                        <include reference="kWy-KP-DdQ"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="tapCatchButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dDa-rN-2R0"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -211,6 +234,7 @@
                             <constraint firstItem="9RE-Bg-sQP" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="Jn5-w2-XGE"/>
                             <constraint firstItem="lc5-as-s4Q" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="NMR-M3-1yF"/>
                             <constraint firstItem="lc5-as-s4Q" firstAttribute="leading" secondItem="9RE-Bg-sQP" secondAttribute="trailing" constant="48" id="PHB-vn-Jhn"/>
+                            <constraint firstItem="rjw-a7-w7i" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="Szn-cO-0ZJ"/>
                             <constraint firstItem="dpl-5r-c0h" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="Vxn-v1-3i9"/>
                             <constraint firstItem="y4d-XL-63F" firstAttribute="top" secondItem="9RE-Bg-sQP" secondAttribute="bottom" constant="28" id="XMF-hS-7bI"/>
                             <constraint firstItem="o0M-Dj-3HP" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-5" id="bFo-c3-ksX"/>
@@ -218,6 +242,7 @@
                             <constraint firstItem="oFK-j7-yQQ" firstAttribute="top" secondItem="dpl-5r-c0h" secondAttribute="bottom" constant="8" id="e2E-yv-k1Y"/>
                             <constraint firstItem="O1e-tp-QfD" firstAttribute="top" secondItem="o0M-Dj-3HP" secondAttribute="bottom" constant="8" id="jVE-Vb-WzA"/>
                             <constraint firstItem="GzD-j6-CTG" firstAttribute="leading" secondItem="O1e-tp-QfD" secondAttribute="trailing" constant="25" id="p4e-Ue-2Mv"/>
+                            <constraint firstItem="rjw-a7-w7i" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="16" id="pgv-RW-UVd"/>
                             <constraint firstItem="dpl-5r-c0h" firstAttribute="top" secondItem="y4d-XL-63F" secondAttribute="bottom" constant="8" id="qkw-MF-Nhe"/>
                             <constraint firstItem="9RE-Bg-sQP" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="rRC-ma-3H6"/>
                             <constraint firstItem="xZM-XR-iMf" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="rkn-c4-98z"/>
@@ -238,12 +263,15 @@
                                 <exclude reference="xZM-XR-iMf"/>
                                 <exclude reference="nEe-KI-xQa"/>
                                 <exclude reference="GzD-j6-CTG"/>
+                                <exclude reference="rjw-a7-w7i"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="CDY-Di-uMG"/>
                                 <exclude reference="e2E-yv-k1Y"/>
                                 <exclude reference="9US-nW-ZKp"/>
                                 <exclude reference="bFo-c3-ksX"/>
+                                <exclude reference="Szn-cO-0ZJ"/>
+                                <exclude reference="pgv-RW-UVd"/>
                                 <exclude reference="jVE-Vb-WzA"/>
                                 <exclude reference="vyW-sa-kvu"/>
                                 <exclude reference="p4e-Ue-2Mv"/>
@@ -262,12 +290,15 @@
                                 <include reference="xZM-XR-iMf"/>
                                 <include reference="nEe-KI-xQa"/>
                                 <include reference="GzD-j6-CTG"/>
+                                <include reference="rjw-a7-w7i"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="CDY-Di-uMG"/>
                                 <include reference="e2E-yv-k1Y"/>
                                 <include reference="9US-nW-ZKp"/>
                                 <include reference="bFo-c3-ksX"/>
+                                <include reference="Szn-cO-0ZJ"/>
+                                <include reference="pgv-RW-UVd"/>
                                 <include reference="jVE-Vb-WzA"/>
                                 <include reference="vyW-sa-kvu"/>
                                 <include reference="p4e-Ue-2Mv"/>
