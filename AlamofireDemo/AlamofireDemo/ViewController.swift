@@ -9,15 +9,33 @@
 import UIKit
 import Alamofire
 
-class ViewController: UIViewController {
+//网络测试地址http://jsonplaceholder.typicode.com/
+
+let kFileTempData = "FileTempData"
+
+class ViewController: UIViewController, NSURLSessionDownloadDelegate{
     
     @IBOutlet var uploadImageView: UIImageView!
+    
+    @IBOutlet var downloadImageView: UIImageView!
+    
+    @IBOutlet var downloadProgressView: UIProgressView!
+    
+    var downloadTask: NSURLSessionDownloadTask? = nil
+    var downloadSession: NSURLSession? = nil
+    var downloadData: NSData? = nil
+    
+    
+    
+    
     var hostString = "http://127.0.0.1/test.php"
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
+        self.downloadSession = NSURLSession(configuration: config, delegate: self, delegateQueue: nil)
+        self.downloadData = NSUserDefaults.standardUserDefaults().objectForKey(kFileTempData) as? NSData
     }
     
     
@@ -25,8 +43,10 @@ class ViewController: UIViewController {
         requestWithGet()
     }
     
+    /**
+     使用Alamofire进行GET请求
+     */
     func requestWithGet() {
-        
         let parameters = ["key1": "value1", "key2": "value2", "key3": "value3"]
         
         Alamofire.request(.GET, hostString, parameters: parameters)
@@ -37,7 +57,12 @@ class ViewController: UIViewController {
         }
     }
 
-    func tapPostButton(sender: AnyObject) {
+    /**
+     使用Alamofire进行post请求
+     
+     - parameter sender:
+     */
+    @IBAction func tapPostButton(sender: AnyObject) {
         let parameters = ["key01": "value01", "key02": "value02", "key03": "value03"]
         Alamofire.request(.POST, hostString, parameters: parameters)
             .responseJSON { (response) in
@@ -49,6 +74,12 @@ class ViewController: UIViewController {
     }
     
     
+    
+    /**
+     通过NSURLSessionDataTask进行get请求
+     
+     - parameter sender:
+     */
     @IBAction func tapSessionGetButton(sender: AnyObject) {
         let parameters = ["get": "value01",
                           "arr": ["元素1", "元素2"],
@@ -57,58 +88,19 @@ class ViewController: UIViewController {
         sessionDataTaskRequest("GET", parameters: parameters)
     }
     
+    
+    
+    /**
+     通过NSURLSessionDataTask进行Post请求
+     
+     - parameter sender:
+     */
     @IBAction func tapSessionPostButton(sender: AnyObject) {
         let parameters = ["post": "value01",
                           "arr": ["元素1", "元素2"],
                           "dic":["key1":"value1", "key2":"value2"]]
         
         sessionDataTaskRequest("POST", parameters: parameters)
-    }
-    
-    
-    @IBAction func tapSessionUploadFileButton(sender: AnyObject) {
-        
-        //从网络获取图片
-        let fileUrl = NSURL.init(string: "http://img.taopic.com/uploads/allimg/140326/235113-1403260I33562.jpg")
-        var fileData: NSData? = nil
-        
-        let dispatchGroup = dispatch_group_create()
-        dispatch_group_async(dispatchGroup, dispatch_get_global_queue(0, 0)) {
-            fileData = NSData.init(contentsOfURL: fileUrl!)
-        }
-    
-        dispatch_group_notify(dispatchGroup, dispatch_get_global_queue(0, 0)) {
-            //更新主线程
-            dispatch_async(dispatch_get_main_queue(), {
-                self.uploadImageView.image = UIImage.init(data: fileData!)
-            })
-            
-            self.uploadTask(fileData!)
-        }
-    }
-    
-    
-    func uploadTask(parameters:NSData) {
-        let uploadUrlString = "http://127.0.0.1/upload.php"
-        let url: NSURL = NSURL.init(string: uploadUrlString)!
-        
-        let request = NSMutableURLRequest.init(URL: url)
-        request.HTTPMethod = "POST"
-        
-        let session: NSURLSession = NSURLSession.sharedSession()
-        let uploadTask = session.uploadTaskWithRequest(request, fromData: parameters) {
-            (data:NSData?, response:NSURLResponse?, error:NSError?) -> Void in
-            if error != nil{
-                print(error?.code)
-                print(error?.description)
-            }else{
-                print("上传成功")
-            }
-        }
-        //使用resume方法启动任务
-        uploadTask.resume()
-
-        
     }
     
     /**
@@ -121,22 +113,26 @@ class ViewController: UIViewController {
     func sessionDataTaskRequest(method: String, parameters:[String:AnyObject]){
         
         let escapeQueryString = query(parameters)
-        
         print("转义后的url字符串：" + escapeQueryString)
         
+        /**
+         *  Get方式就将参数拼接到url上
+         */
         if method == "GET" {
             hostString += "?" + escapeQueryString
         }
-
+        
         let url: NSURL = NSURL.init(string: hostString)!
         let request: NSMutableURLRequest = NSMutableURLRequest.init(URL: url)
         request.HTTPMethod = method
         
+        /**
+         *  POST方法就将参数放到HTTPBody中
+         */
         if method == "POST" {
             request.HTTPBody = escapeQueryString.dataUsingEncoding(NSUTF8StringEncoding)
         }
         
-
         
         let session: NSURLSession = NSURLSession.sharedSession()
         
@@ -146,7 +142,6 @@ class ViewController: UIViewController {
                 return
             }
             if data != nil {
-                print(data)
                 let json = try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments)
                 print(json)
             }
@@ -157,17 +152,12 @@ class ViewController: UIViewController {
     
     
     
-    
-
-    
-    
-    
-    
-    
     // - MARK - Alamofire中的三个方法该方法将字典转换成json串
     func query(parameters: [String: AnyObject]) -> String {
-        var components: [(String, String)] = []
         
+        var components: [(String, String)] = []     //存有元组的数组，元组由ULR中的(key, value)组成
+        
+        //遍历参数字典
         for key in parameters.keys.sort(<) {
             let value = parameters[key]!
             components += queryComponents(key, value)
@@ -197,17 +187,6 @@ class ViewController: UIViewController {
     }
     
     /**
-     对加入到URL中的字符进行编码，因为字符串中有些字符会引起歧义，URL采用ASCII码，而非Unicode编码
-     RFC3986文档规定，Url中只允许包含英文字母（a-zA-Z）、数字（0-9）、-_.~4个特殊字符以及所有保留字符
-     http://www.cnblogs.com/greatverve/archive/2011/12/12/URL-Encoding-Decoding.html
-     
-     foo://example.com:8042/over/there?name=ferret#nose
-     
-     \_/ \______________/ \________/\_________/ \__/
-     
-     |         |              |         |        |
-     
-     scheme     authority        path     query   fragment
      
      - parameter string: 要转义的字符串
      
@@ -216,7 +195,7 @@ class ViewController: UIViewController {
     func escape(string: String) -> String {
         /*
          :用于分隔协议和主机，/用于分隔主机和路径，?用于分隔路径和查询参数, #用于分隔查询与碎片
-        */
+         */
         let generalDelimitersToEncode = ":#[]@" // does not include "?" or "/" due to RFC 3986 - Section 3.4
         
         //组件中的分隔符：如=用于表示查询参数中的键值对，&符号用于分隔查询多个键值对
@@ -242,7 +221,7 @@ class ViewController: UIViewController {
         if #available(iOS 8.3, OSX 10.10, *) {
             escaped = string.stringByAddingPercentEncodingWithAllowedCharacters(allowedCharacterSet) ?? string
         } else {
-            let batchSize = 50
+            let batchSize = 50      //一次转义的字符数
             var index = string.startIndex
             
             while index != string.endIndex {
@@ -260,7 +239,194 @@ class ViewController: UIViewController {
         
         return escaped
     }
+    
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+   
+    
+    
+    
+    
+    
+    /**
+     通过NSURLSessionUploadTask进行数据上传
+     
+     - parameter sender:
+     */
+    @IBAction func tapSessionUploadFileButton(sender: AnyObject) {
+        
+        //从网络获取图片
+        let fileUrl = NSURL.init(string: "http://img.taopic.com/uploads/allimg/140326/235113-1403260I33562.jpg")
+        var fileData: NSData? = nil
+        
+        let dispatchGroup = dispatch_group_create()
+        dispatch_group_async(dispatchGroup, dispatch_get_global_queue(0, 0)) {
+            fileData = NSData.init(contentsOfURL: fileUrl!)
+        }
+    
+        dispatch_group_notify(dispatchGroup, dispatch_get_global_queue(0, 0)) {
+            //更新主线程
+            dispatch_async(dispatch_get_main_queue(), {
+                self.uploadImageView.image = UIImage.init(data: fileData!)
+            })
+            
+            //将fileData上传到服务器
+            self.uploadTask(fileData!)
+        }
+    }
+    
+    /**
+     上传图片到服务器，NSURLSessionUploadTask的使用
+     
+     - parameter parameters: 上传到服务器的二进制文件
+     */
+    func uploadTask(parameters:NSData) {
+        let uploadUrlString = "http://127.0.0.1/upload.php"
+        let url: NSURL = NSURL.init(string: uploadUrlString)!
+        
+        let request = NSMutableURLRequest.init(URL: url)
+        request.HTTPMethod = "POST"
+        
+        let session: NSURLSession = NSURLSession.sharedSession()
+        let uploadTask: NSURLSessionUploadTask = session.uploadTaskWithRequest(request, fromData: parameters) {
+            (data:NSData?, response:NSURLResponse?, error:NSError?) -> Void in
+            if error != nil{
+                print(error?.code)
+                print(error?.description)
+            }else{
+                print("上传成功")
+            }
+        }
+        //使用resume方法启动任务
+        uploadTask.resume()
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    @IBAction func tapDownloadTaskButton(sender: AnyObject) {
+        //从网络下载图片
+        let fileUrl: NSURL? = NSURL(string: "http://img3.91.com/uploads/allimg/140108/32-14010QK546.jpg")
+        let request: NSURLRequest = NSURLRequest(URL: fileUrl!)
+
+        
+        if (self.downloadData != nil) {
+            self.downloadTask = self.downloadSession?.downloadTaskWithResumeData(self.downloadData!)
+        }else{
+             self.downloadTask = self.downloadSession?.downloadTaskWithRequest(request)
+        }
+        
+        // 开始任务
+        downloadTask?.resume()
+    }
+    
+    
+    @IBAction func tapPauseButton(sender: AnyObject) {
+        downloadTask?.cancelByProducingResumeData({ (data) in
+            if data != nil {
+                NSUserDefaults.standardUserDefaults().setObject(data, forKey: kFileTempData)
+                self.downloadData = data
+                print(data?.length)
+            }
+        })
+    }
+    
+
+    // MARK --NSURLSessionDownloadDelegate
+    /**
+     下载完成后执行的代理
+     
+     - parameter session:      session对象
+     - parameter downloadTask: downloadTask对象
+     - parameter location:     本地URL
+     */
+    func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
+        
+        NSUserDefaults.standardUserDefaults().removeObjectForKey(kFileTempData)
+        self.downloadData = nil
+        
+        print("下载的临时文件路径:\(location)")                //输出下载文件临时目录
+       
+        guard let tempFilePath: String = location.path else {
+            return
+        }
+       
+        //创建文件存储路径
+        let newFileName = String(UInt(NSDate().timeIntervalSince1970))
+        let newFilePath: String = NSHomeDirectory() + "/Documents/\(newFileName).png"
+        
+        //创建文件管理器
+        let fileManager:NSFileManager = NSFileManager.defaultManager()
+        
+        try! fileManager.moveItemAtPath(tempFilePath, toPath: newFilePath)
+        print("将临时文件进行存储，路径为:\(newFilePath)")
+        
+        //将下载后的图片进行显示
+        let imageData = NSData(contentsOfFile: newFilePath)
+        dispatch_async(dispatch_get_main_queue()) { 
+            self.downloadImageView.image = UIImage.init(data: imageData!)
+        }
+    }
+    
+    /**
+     实时监听下载任务回调
+     
+     - parameter session:                   session对象
+     - parameter downloadTask:              下载任务
+     - parameter bytesWritten:              本次接收
+     - parameter totalBytesWritten:         总共接收
+     - parameter totalBytesExpectedToWrite: 总量
+     */
+    func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+        
+        print("\n本次接收：\(bytesWritten)")
+        print("已下载：\(totalBytesWritten)")
+        print("文件总量：\(totalBytesExpectedToWrite)")
+        
+        //获取进度
+        let written:Float = (Float)(totalBytesWritten)
+        let total:Float = (Float)(totalBytesExpectedToWrite)
+        dispatch_async(dispatch_get_main_queue()) { 
+            self.downloadProgressView.progress = written/total
+        }
+        
+    }
+    
+    /**
+     下载偏移，主要用于暂停续传
+     
+     - parameter session:
+     - parameter downloadTask:
+     - parameter fileOffset:
+     - parameter expectedTotalBytes:
+     */
+    func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didResumeAtOffset fileOffset: Int64, expectedTotalBytes: Int64) {
+        print(fileOffset)
+        print(expectedTotalBytes)
+    }
+    
+    
+    
+    
+    
 
     
     override func didReceiveMemoryWarning() {
