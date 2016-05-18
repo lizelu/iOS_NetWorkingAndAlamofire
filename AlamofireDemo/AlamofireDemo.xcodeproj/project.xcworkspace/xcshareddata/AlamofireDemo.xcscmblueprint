@@ -1,16 +1,18 @@
 {
-  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "59B0DD3A0DC0B86D2A06DD4B68CBD1C997876614",
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "CFCC1936E76C07E2BE1DFF116E938AAD8C505EEA",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
 
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "67620B5EFA902936DF04070AF595B76AB0333747" : 0,
-    "59B0DD3A0DC0B86D2A06DD4B68CBD1C997876614" : 0
+    "CFCC1936E76C07E2BE1DFF116E938AAD8C505EEA" : 0,
+    "59B0DD3A0DC0B86D2A06DD4B68CBD1C997876614" : 0,
+    "67620B5EFA902936DF04070AF595B76AB0333747" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "1D610600-D5BA-44EA-AD51-075E20EFADB3",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "67620B5EFA902936DF04070AF595B76AB0333747" : "GitHub\/Alamofire\/",
-    "59B0DD3A0DC0B86D2A06DD4B68CBD1C997876614" : "GitHub\/"
+    "CFCC1936E76C07E2BE1DFF116E938AAD8C505EEA" : "iOS_NetWorkingAndAlamofire\/",
+    "59B0DD3A0DC0B86D2A06DD4B68CBD1C997876614" : "GitHub\/",
+    "67620B5EFA902936DF04070AF595B76AB0333747" : "GitHub\/Alamofire\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "AlamofireDemo",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
@@ -25,6 +27,11 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/Alamofire\/Alamofire.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "67620B5EFA902936DF04070AF595B76AB0333747"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/lizelu\/iOS_NetWorkingAndAlamofire.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "CFCC1936E76C07E2BE1DFF116E938AAD8C505EEA"
     }
   ]
 }
