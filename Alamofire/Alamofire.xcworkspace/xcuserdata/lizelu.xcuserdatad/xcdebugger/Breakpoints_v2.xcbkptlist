@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "0"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Example/Source/AppDelegate.swift"
+            timestampString = "485061339.723139"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "21"
+            endingLineNumber = "21">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "iOS_Example.AppDelegate.__deallocating_deinit"
+                  moduleName = "iOS Example"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lizelu/Documents/GitHub/Alamofire/Example/Source/AppDelegate.swift"
+                  timestampString = "485061340.496304"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "4">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "iOS_Example.AppDelegate.init () -&gt; iOS_Example.AppDelegate"
+                  moduleName = "iOS Example"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lizelu/Documents/GitHub/Alamofire/Example/Source/AppDelegate.swift"
+                  timestampString = "485061340.497432"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "30"
+                  endingLineNumber = "30"
+                  offsetFromSymbolStart = "24">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "main"
+                  moduleName = "iOS Example"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lizelu/Documents/GitHub/Alamofire/Example/Source/AppDelegate.swift"
+                  timestampString = "485061340.497542"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "28"
+                  endingLineNumber = "28"
+                  offsetFromSymbolStart = "22">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
