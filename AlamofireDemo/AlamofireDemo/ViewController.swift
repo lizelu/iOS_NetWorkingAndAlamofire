@@ -320,7 +320,11 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
     
     
     
-    
+    /**
+     图片开始的下载
+     
+     - parameter sender:
+     */
     
     @IBAction func tapDownloadTaskButton(sender: AnyObject) {
         //从网络下载图片
@@ -339,6 +343,11 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
     }
     
     
+    /**
+     暂停下载
+     
+     - parameter sender:
+     */
     @IBAction func tapPauseButton(sender: AnyObject) {
         downloadTask?.cancelByProducingResumeData({ (data) in
             if data != nil {
@@ -422,6 +431,19 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
         print(fileOffset)
         print(expectedTotalBytes)
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     /**
