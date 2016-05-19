@@ -7,13 +7,11 @@
 //
 
 import UIKit
-import Alamofire
-
-//网络测试地址http://jsonplaceholder.typicode.com/
 
 let kFileTempData = "FileTempData"
 
 class ViewController: UIViewController, NSURLSessionDownloadDelegate{
+    @IBOutlet var logTextView: UITextView!
     
     @IBOutlet var uploadImageView: UIImageView!
     
@@ -25,11 +23,7 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
     var downloadSession: NSURLSession? = nil
     var downloadData: NSData? = nil
     
-    
-    
-    
-    var hostString = "http://127.0.0.1/test.php"
-    
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,39 +33,6 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
     }
     
     
-    @IBAction func tapGetButton(sender: AnyObject) {
-        requestWithGet()
-    }
-    
-    /**
-     使用Alamofire进行GET请求
-     */
-    func requestWithGet() {
-        let parameters = ["key1": "value1", "key2": "value2", "key3": "value3"]
-        
-        Alamofire.request(.GET, hostString, parameters: parameters)
-        .responseJSON { (response) in
-            if let json = response.result.value {
-                print("GET字典:\(json)")
-            }
-        }
-    }
-
-    /**
-     使用Alamofire进行post请求
-     
-     - parameter sender:
-     */
-    @IBAction func tapPostButton(sender: AnyObject) {
-        let parameters = ["key01": "value01", "key02": "value02", "key03": "value03"]
-        Alamofire.request(.POST, hostString, parameters: parameters)
-            .responseJSON { (response) in
-                if let json = response.result.value {
-                    print("POST字典:\(json)")
-                }
-        }
-
-    }
     
     
     
@@ -81,10 +42,9 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
      - parameter sender:
      */
     @IBAction func tapSessionGetButton(sender: AnyObject) {
-        let parameters = ["get": "value01",
-                          "arr": ["元素1", "元素2"],
-                          "dic":["key1":"value1", "key2":"value2"]]
-
+        
+        let parameters = ["userId": "1"]
+        showLog("正在GET请求数据")
         sessionDataTaskRequest("GET", parameters: parameters)
     }
     
@@ -96,9 +56,8 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
      - parameter sender:
      */
     @IBAction func tapSessionPostButton(sender: AnyObject) {
-        let parameters = ["post": "value01",
-                          "arr": ["元素1", "元素2"],
-                          "dic":["key1":"value1", "key2":"value2"]]
+        showLog("正在POST请求数据")
+        let parameters = ["userId": "1"]
         
         sessionDataTaskRequest("POST", parameters: parameters)
     }
@@ -112,9 +71,9 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
     
     func sessionDataTaskRequest(method: String, parameters:[String:AnyObject]){
         
-        let escapeQueryString = query(parameters)
-        print("转义后的url字符串：" + escapeQueryString)
+        var hostString = "http://jsonplaceholder.typicode.com/posts"
         
+        let escapeQueryString = query(parameters)
         /**
          *  Get方式就将参数拼接到url上
          */
@@ -138,18 +97,32 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
         
         let sessionTask: NSURLSessionDataTask = session.dataTaskWithRequest(request, completionHandler: { (data, response, error) in
             if error != nil {
-                print(error)
+                self.showLog(error!)
                 return
             }
             if data != nil {
                 let json = try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments)
-                print(json)
+                self.showLog(json!)
             }
         });
         
         sessionTask.resume()
     }
     
+    
+    
+    
+    /**
+     测试URL编码
+     
+     - parameter sender: 
+     */
+    @IBAction func tapURLEncodeButton(sender: AnyObject) {
+        let parameters = ["post": "value01",
+                          "arr": ["元素1", "元素2"],
+                          "dic":["key1":"value1", "key2":"value2"]]
+        showLog(query(parameters))
+    }
     
     
     // - MARK - Alamofire中的三个方法该方法将字典转换成json串
@@ -301,10 +274,10 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
         let uploadTask: NSURLSessionUploadTask = session.uploadTaskWithRequest(request, fromData: parameters) {
             (data:NSData?, response:NSURLResponse?, error:NSError?) -> Void in
             if error != nil{
-                print(error?.code)
-                print(error?.description)
+                self.showLog((error?.code)!)
+                self.showLog((error?.description)!)
             }else{
-                print("上传成功")
+                self.showLog("上传成功")
             }
         }
         //使用resume方法启动任务
@@ -353,7 +326,7 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
             if data != nil {
                 NSUserDefaults.standardUserDefaults().setObject(data, forKey: kFileTempData)
                 self.downloadData = data
-                print(data?.length)
+                self.showLog((data?.length)!)
             }
         })
     }
@@ -372,7 +345,7 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
         NSUserDefaults.standardUserDefaults().removeObjectForKey(kFileTempData)
         self.downloadData = nil
         
-        print("下载的临时文件路径:\(location)")                //输出下载文件临时目录
+        showLog("下载的临时文件路径:\(location)")                //输出下载文件临时目录
        
         guard let tempFilePath: String = location.path else {
             return
@@ -386,7 +359,7 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
         let fileManager:NSFileManager = NSFileManager.defaultManager()
         
         try! fileManager.moveItemAtPath(tempFilePath, toPath: newFilePath)
-        print("将临时文件进行存储，路径为:\(newFilePath)")
+        showLog("将临时文件进行存储，路径为:\(newFilePath)")
         
         //将下载后的图片进行显示
         let imageData = NSData(contentsOfFile: newFilePath)
@@ -406,9 +379,9 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
      */
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
         
-        print("\n本次接收：\(bytesWritten)")
-        print("已下载：\(totalBytesWritten)")
-        print("文件总量：\(totalBytesExpectedToWrite)")
+        showLog("\n本次接收：\(bytesWritten)")
+        showLog("已下载：\(totalBytesWritten)")
+        showLog("文件总量：\(totalBytesExpectedToWrite)")
         
         //获取进度
         let written:Float = (Float)(totalBytesWritten)
@@ -428,8 +401,7 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
      - parameter expectedTotalBytes:
      */
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didResumeAtOffset fileOffset: Int64, expectedTotalBytes: Int64) {
-        print(fileOffset)
-        print(expectedTotalBytes)
+
     }
     
     
@@ -469,7 +441,7 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
         
         let dataTask: NSURLSessionDataTask = session.dataTaskWithRequest(request) { (data, response, error) in
             if data != nil {
-                print(String.init(data: data!, encoding: NSUTF8StringEncoding))
+                self.showLog(String.init(data: data!, encoding: NSUTF8StringEncoding)!)
             }
         }
         dataTask.resume()
@@ -488,7 +460,7 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
         
         let dataTask: NSURLSessionDataTask = session.dataTaskWithRequest(request) { (data, response, error) in
             if data != nil {
-                print(String.init(data: data!, encoding: NSUTF8StringEncoding))
+                self.showLog(String.init(data: data!, encoding: NSUTF8StringEncoding)!)
             }
         }
         dataTask.resume()
@@ -513,7 +485,7 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
 
         let dataTask: NSURLSessionDataTask = session.dataTaskWithRequest(request) { (data, response, error) in
             if data != nil {
-                print(String.init(data: data!, encoding: NSUTF8StringEncoding))
+                self.showLog(String.init(data: data!, encoding: NSUTF8StringEncoding)!)
             }
         }
         dataTask.resume()
@@ -540,12 +512,40 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
         
         let dataTask: NSURLSessionDataTask = session.dataTaskWithRequest(request) { (data, response, error) in
             if data != nil {
-                print(String.init(data: data!, encoding: NSUTF8StringEncoding))
+                self.showLog(String.init(data: data!, encoding: NSUTF8StringEncoding)!)
             }
         }
         
         dataTask.resume()
     }
+    
+    
+    
+    @IBAction func tapClearLogButton(sender: AnyObject) {
+        self.logTextView.text = ""
+    }
+    
+    func showLog(info: AnyObject) {
+        
+        let log = "\(info)"
+        print(log)
+        
+        let logs = self.logTextView.text
+        let newlogs = String((logs + "\n"+log)).stringByReplacingOccurrencesOfString("\\n", withString: "\n")
+        
+        dispatch_async(dispatch_get_main_queue()) { 
+            self.logTextView.text = newlogs
+            
+            let length = newlogs.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)
+            if length > 0 {
+                let range: NSRange = NSMakeRange(length-1, 1)
+                self.logTextView.scrollRangeToVisible(range)
+            }
+        }
+        
+    }
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

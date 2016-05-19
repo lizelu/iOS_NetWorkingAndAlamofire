@@ -8,13 +8,55 @@
 
 import UIKit
 
+import Alamofire
+
+//网络测试地址http://jsonplaceholder.typicode.com/
+
+
 class AlamofireViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "Alamofire"
 
         // Do any additional setup after loading the view.
     }
+    
+    
+    /**
+     使用Alamofire进行GET请求
+     */
+
+    @IBAction func tapGetButton(sender: AnyObject) {
+        let hostString = "http://jsonplaceholder.typicode.com/posts"
+        let parameters = ["userId": "1"]
+        
+        Alamofire.request(.GET, hostString, parameters: parameters)
+            .responseJSON { (response) in
+                if let json = response.result.value {
+                    print("GET字典:\(json)")
+                }
+        }
+
+    }
+    
+    /**
+     使用Alamofire进行post请求
+     
+     - parameter sender:
+     */
+    @IBAction func tapPostButton(sender: AnyObject) {
+        let hostString = "http://jsonplaceholder.typicode.com/posts"
+        let parameters = ["userId": "1"]
+        Alamofire.request(.POST, hostString, parameters: parameters)
+            .responseJSON { (response) in
+                if let json = response.result.value {
+                    print("POST字典:\(json)")
+                }
+        }
+        
+    }
+
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
