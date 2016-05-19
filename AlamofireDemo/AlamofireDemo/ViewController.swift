@@ -430,33 +430,79 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
         ReloadIgnoringLocalCacheData -- 忽略缓存，直接请求服务器数据
         ReturnCacheDataElseLoad -- 本地如有缓存就使用，忽略其有效性，无则请求服务器
         ReturnCacheDataDontLoad -- 直接加载本地缓存，没有也不请求网络
-        其他的缓存策略还未实现
+        ReloadIgnoringLocalAndRemoteCacheData -- 未实现
+        ReloadRevalidatingCacheData -- 未实现
      
      - parameter sender:
      */
-    @IBAction func tapCatchButton(sender: AnyObject) {
-        
-        //let URLCatch: NSURLCache = URLCatch()
-        
-        //从网络下载图片
-        //let fileUrl: NSURL? = NSURL(string: "http://img.taopic.com/uploads/allimg/140326/235113-1403260I33562.jpg")
+    
+    
+     //1.使用NSMutableURLRequest指定缓存策略
+    @IBAction func tapRequestCacheButton(sender: AnyObject) {
         let fileUrl: NSURL? = NSURL(string: "http://www.baidu.com")
-        
         let request: NSMutableURLRequest = NSMutableURLRequest(URL: fileUrl!)
         
-        //1.使用request指定缓存策略
-        //request.cachePolicy = .UseProtocolCachePolicy
-        //let session: NSURLSession = NSURLSession.sharedSession()
+        request.cachePolicy = .ReturnCacheDataElseLoad
+        let session: NSURLSession = NSURLSession.sharedSession()
         
+        let dataTask: NSURLSessionDataTask = session.dataTaskWithRequest(request) { (data, response, error) in
+            if data != nil {
+                print(String.init(data: data!, encoding: NSUTF8StringEncoding))
+            }
+        }
+        dataTask.resume()
+    }
+    
+    
+    //2.使用NSURLSessionConfiguration指定缓存策略
+    @IBAction func tapConfigurationCacheButton(sender: AnyObject) {
+        let fileUrl: NSURL? = NSURL(string: "http://www.baidu.com")
+        let request: NSMutableURLRequest = NSMutableURLRequest(URL: fileUrl!)
         
-        //2.使用NSURLSessionConfiguration指定缓存策略
-//        let sessionConfig: NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
-//        sessionConfig.requestCachePolicy = .ReturnCacheDataElseLoad
-//        let session: NSURLSession = NSURLSession(configuration: sessionConfig)
-//        
+        let sessionConfig: NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        sessionConfig.requestCachePolicy = .ReturnCacheDataElseLoad
+        let session: NSURLSession = NSURLSession(configuration: sessionConfig)
+
         
+        let dataTask: NSURLSessionDataTask = session.dataTaskWithRequest(request) { (data, response, error) in
+            if data != nil {
+                print(String.init(data: data!, encoding: NSUTF8StringEncoding))
+            }
+        }
+        dataTask.resume()
+
+    }
+
+    @IBAction func tapRequestURLCacheButton(sender: AnyObject) {
+        let fileUrl: NSURL? = NSURL(string: "http://www.baidu.com")
+        let request: NSMutableURLRequest = NSMutableURLRequest(URL: fileUrl!)
         
-        //3.使用URLCache进行缓存
+        //3.使用URLCache + request进行缓存
+        let memoryCapacity = 4 * 1024 * 1024    //内存容量
+        let diskCapacity = 10 * 1024 * 1024     //磁盘容量
+        let cacheFilePath: String = "MyCache/"   //缓存路径
+        
+        let urlCache: NSURLCache = NSURLCache(memoryCapacity: memoryCapacity, diskCapacity: diskCapacity, diskPath: cacheFilePath)
+        NSURLCache.setSharedURLCache(urlCache)
+        request.cachePolicy = .ReturnCacheDataElseLoad
+        let session: NSURLSession = NSURLSession.sharedSession()
+        
+
+        let dataTask: NSURLSessionDataTask = session.dataTaskWithRequest(request) { (data, response, error) in
+            if data != nil {
+                print(String.init(data: data!, encoding: NSUTF8StringEncoding))
+            }
+        }
+        dataTask.resume()
+
+    }
+    
+    @IBAction func tapConfigNSURLCacheButton(sender: AnyObject) {
+        let fileUrl: NSURL? = NSURL(string: "http://www.baidu.com")
+        let request: NSMutableURLRequest = NSMutableURLRequest(URL: fileUrl!)
+        
+
+        //3.使用URLCache + NSURLSessionConfiguration进行缓存
         let memoryCapacity = 4 * 1024 * 1024    //内存容量
         let diskCapacity = 10 * 1024 * 1024     //磁盘容量
         let cacheFilePath: String = "MyCache/"   //缓存路径
@@ -465,32 +511,16 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
         let sessionConfig: NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
         sessionConfig.requestCachePolicy = .ReturnCacheDataElseLoad
         sessionConfig.URLCache = urlCache
-        
         let session: NSURLSession = NSURLSession(configuration: sessionConfig)
-
-        
-        
         
         
         let dataTask: NSURLSessionDataTask = session.dataTaskWithRequest(request) { (data, response, error) in
             if data != nil {
-                
                 print(String.init(data: data!, encoding: NSUTF8StringEncoding))
-                dispatch_async(dispatch_get_main_queue()) {
-                    //self.downloadImageView.image = UIImage.init(data: data!)
-                }
             }
         }
         dataTask.resume()
-        
-        
     }
-    
-    
-    
-    
-
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
