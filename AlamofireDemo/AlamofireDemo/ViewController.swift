@@ -440,21 +440,37 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
         
         //从网络下载图片
         //let fileUrl: NSURL? = NSURL(string: "http://img.taopic.com/uploads/allimg/140326/235113-1403260I33562.jpg")
-        let fileUrl: NSURL? = NSURL(string: "http://www.cnblogs.com")
+        let fileUrl: NSURL? = NSURL(string: "http://www.baidu.com")
         
         let request: NSMutableURLRequest = NSMutableURLRequest(URL: fileUrl!)
         
         //1.使用request指定缓存策略
         //request.cachePolicy = .UseProtocolCachePolicy
-        
         //let session: NSURLSession = NSURLSession.sharedSession()
         
+        
         //2.使用NSURLSessionConfiguration指定缓存策略
+//        let sessionConfig: NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
+//        sessionConfig.requestCachePolicy = .ReturnCacheDataElseLoad
+//        let session: NSURLSession = NSURLSession(configuration: sessionConfig)
+//        
+        
+        
+        //3.使用URLCache进行缓存
+        let memoryCapacity = 4 * 1024 * 1024    //内存容量
+        let diskCapacity = 10 * 1024 * 1024     //磁盘容量
+        let cacheFilePath: String = "MyCache/"   //缓存路径
+
+        let urlCache: NSURLCache = NSURLCache(memoryCapacity: memoryCapacity, diskCapacity: diskCapacity, diskPath: cacheFilePath)
         let sessionConfig: NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
         sessionConfig.requestCachePolicy = .ReturnCacheDataElseLoad
-        
+        sessionConfig.URLCache = urlCache
         
         let session: NSURLSession = NSURLSession(configuration: sessionConfig)
+
+        
+        
+        
         
         let dataTask: NSURLSessionDataTask = session.dataTaskWithRequest(request) { (data, response, error) in
             if data != nil {
