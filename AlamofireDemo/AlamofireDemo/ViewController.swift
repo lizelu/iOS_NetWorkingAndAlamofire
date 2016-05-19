@@ -118,6 +118,7 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
      - parameter sender: 
      */
     @IBAction func tapURLEncodeButton(sender: AnyObject) {
+         showLog("URL编码测试")
         let parameters = ["post": "value01",
                           "arr": ["元素1", "元素2"],
                           "dic":["key1":"value1", "key2":"value2"]]
@@ -237,6 +238,7 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
      - parameter sender:
      */
     @IBAction func tapSessionUploadFileButton(sender: AnyObject) {
+         showLog("正在上传数据")
         
         //从网络获取图片
         let fileUrl = NSURL.init(string: "http://img.taopic.com/uploads/allimg/140326/235113-1403260I33562.jpg")
@@ -300,6 +302,7 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
      */
     
     @IBAction func tapDownloadTaskButton(sender: AnyObject) {
+         showLog("正在下载图片")
         //从网络下载图片
         let fileUrl: NSURL? = NSURL(string: "http://img3.91.com/uploads/allimg/140108/32-14010QK546.jpg")
         let request: NSURLRequest = NSURLRequest(URL: fileUrl!)
@@ -322,6 +325,7 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
      - parameter sender:
      */
     @IBAction func tapPauseButton(sender: AnyObject) {
+        showLog("暂停下载任务")
         downloadTask?.cancelByProducingResumeData({ (data) in
             if data != nil {
                 NSUserDefaults.standardUserDefaults().setObject(data, forKey: kFileTempData)
@@ -379,9 +383,9 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
      */
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
         
-        showLog("\n本次接收：\(bytesWritten)")
-        showLog("已下载：\(totalBytesWritten)")
-        showLog("文件总量：\(totalBytesExpectedToWrite)")
+        showLog("\n本次接收：\(bytesWritten)B")
+        showLog("已下载：\(totalBytesWritten)B")
+        showLog("文件总量：\(totalBytesExpectedToWrite)B")
         
         //获取进度
         let written:Float = (Float)(totalBytesWritten)
@@ -433,6 +437,8 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
     
      //1.使用NSMutableURLRequest指定缓存策略
     @IBAction func tapRequestCacheButton(sender: AnyObject) {
+        showLog("使用NSMutableURLRequest指定缓存策略")
+        
         let fileUrl: NSURL? = NSURL(string: "http://www.baidu.com")
         let request: NSMutableURLRequest = NSMutableURLRequest(URL: fileUrl!)
         
@@ -450,6 +456,8 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
     
     //2.使用NSURLSessionConfiguration指定缓存策略
     @IBAction func tapConfigurationCacheButton(sender: AnyObject) {
+        showLog("使用NSURLSessionConfiguration指定缓存策略")
+        
         let fileUrl: NSURL? = NSURL(string: "http://www.baidu.com")
         let request: NSMutableURLRequest = NSMutableURLRequest(URL: fileUrl!)
         
@@ -469,6 +477,9 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
 
     //3.使用URLCache + request进行缓存
     @IBAction func tapRequestURLCacheButton(sender: AnyObject) {
+        showLog("使用URLCache + request进行缓存")
+        
+        
         let fileUrl: NSURL? = NSURL(string: "http://www.baidu.com")
         let request: NSMutableURLRequest = NSMutableURLRequest(URL: fileUrl!)
         
@@ -494,6 +505,9 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
     
     //4.使用URLCache + NSURLSessionConfiguration进行缓存
     @IBAction func tapConfigNSURLCacheButton(sender: AnyObject) {
+        
+        showLog("使用URLCache + NSURLSessionConfiguration进行缓存")
+        
         let fileUrl: NSURL? = NSURL(string: "http://www.baidu.com")
         let request: NSMutableURLRequest = NSMutableURLRequest(URL: fileUrl!)
         
