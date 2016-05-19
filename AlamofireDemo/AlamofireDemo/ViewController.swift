@@ -473,11 +473,12 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
 
     }
 
+    //3.使用URLCache + request进行缓存
     @IBAction func tapRequestURLCacheButton(sender: AnyObject) {
         let fileUrl: NSURL? = NSURL(string: "http://www.baidu.com")
         let request: NSMutableURLRequest = NSMutableURLRequest(URL: fileUrl!)
         
-        //3.使用URLCache + request进行缓存
+        
         let memoryCapacity = 4 * 1024 * 1024    //内存容量
         let diskCapacity = 10 * 1024 * 1024     //磁盘容量
         let cacheFilePath: String = "MyCache/"   //缓存路径
@@ -497,20 +498,21 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
 
     }
     
+    //4.使用URLCache + NSURLSessionConfiguration进行缓存
     @IBAction func tapConfigNSURLCacheButton(sender: AnyObject) {
         let fileUrl: NSURL? = NSURL(string: "http://www.baidu.com")
         let request: NSMutableURLRequest = NSMutableURLRequest(URL: fileUrl!)
         
-
-        //3.使用URLCache + NSURLSessionConfiguration进行缓存
         let memoryCapacity = 4 * 1024 * 1024    //内存容量
         let diskCapacity = 10 * 1024 * 1024     //磁盘容量
         let cacheFilePath: String = "MyCache/"   //缓存路径
 
         let urlCache: NSURLCache = NSURLCache(memoryCapacity: memoryCapacity, diskCapacity: diskCapacity, diskPath: cacheFilePath)
+        
         let sessionConfig: NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
         sessionConfig.requestCachePolicy = .ReturnCacheDataElseLoad
         sessionConfig.URLCache = urlCache
+        
         let session: NSURLSession = NSURLSession(configuration: sessionConfig)
         
         
@@ -519,6 +521,7 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
                 print(String.init(data: data!, encoding: NSUTF8StringEncoding))
             }
         }
+        
         dataTask.resume()
     }
     override func didReceiveMemoryWarning() {
