@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F410398B1CEC09B30015D15D /* test.png in Resources */ = {isa = PBXBuildFile; fileRef = F410398A1CEC09B30015D15D /* test.png */; };
+		F45409CD1CED6D7B00F190C0 /* AlamofireViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F45409CC1CED6D7B00F190C0 /* AlamofireViewController.swift */; };
 		F4AC3B131CE96D0000F65285 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4AC3B121CE96D0000F65285 /* AppDelegate.swift */; };
 		F4AC3B151CE96D0000F65285 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4AC3B141CE96D0000F65285 /* ViewController.swift */; };
 		F4AC3B181CE96D0000F65285 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4AC3B161CE96D0000F65285 /* Main.storyboard */; };
@@ -92,6 +93,7 @@
 
 /* Begin PBXFileReference section */
 		F410398A1CEC09B30015D15D /* test.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = test.png; path = ../../../../../Desktop/test.png; sourceTree = "<group>"; };
+		F45409CC1CED6D7B00F190C0 /* AlamofireViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireViewController.swift; sourceTree = "<group>"; };
 		F4AC3B0F1CE96D0000F65285 /* AlamofireDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlamofireDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4AC3B121CE96D0000F65285 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F4AC3B141CE96D0000F65285 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 				F4AC3B241CE96D1A00F65285 /* Alamofire.xcodeproj */,
 				F4AC3B121CE96D0000F65285 /* AppDelegate.swift */,
 				F4AC3B141CE96D0000F65285 /* ViewController.swift */,
+				F45409CC1CED6D7B00F190C0 /* AlamofireViewController.swift */,
 				F4AC3B161CE96D0000F65285 /* Main.storyboard */,
 				F4AC3B191CE96D0000F65285 /* Assets.xcassets */,
 				F410398A1CEC09B30015D15D /* test.png */,
@@ -292,6 +295,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4AC3B151CE96D0000F65285 /* ViewController.swift in Sources */,
+				F45409CD1CED6D7B00F190C0 /* AlamofireViewController.swift in Sources */,
 				F4AC3B131CE96D0000F65285 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

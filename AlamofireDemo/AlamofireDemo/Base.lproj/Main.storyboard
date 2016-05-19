@@ -403,7 +403,13 @@
                             </mask>
                         </variation>
                     </view>
-                    <navigationItem key="navigationItem" id="MIN-Qs-q66"/>
+                    <navigationItem key="navigationItem" id="MIN-Qs-q66">
+                        <barButtonItem key="rightBarButtonItem" title="Alamofire" id="6cc-0D-Tcx">
+                            <connections>
+                                <segue destination="W1q-Jc-OmM" kind="show" id="xcn-dN-ZSF"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="downloadImageView" destination="nEe-KI-xQa" id="UpJ-Vv-eNk"/>
                         <outlet property="downloadProgressView" destination="xZM-XR-iMf" id="ZUm-Sy-EDX"/>
@@ -412,7 +418,24 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1266" y="65.25"/>
+            <point key="canvasLocation" x="1281" y="-457.5"/>
+        </scene>
+        <!--Alamofire View Controller-->
+        <scene sceneID="EZ1-cl-ask">
+            <objects>
+                <viewController storyboardIdentifier="AlamofireViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="W1q-Jc-OmM" customClass="AlamofireViewController" customModule="AlamofireDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="UNM-9v-LIy"/>
+                        <viewControllerLayoutGuide type="bottom" id="Fzu-HZ-zlQ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="1HE-BU-cXn">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UKn-JY-dJP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1960.5" y="-457.5"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="wS8-oG-x0S">
