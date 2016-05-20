@@ -10,7 +10,7 @@ import UIKit
 
 let kFileTempData = "FileTempData"
 
-class ViewController: UIViewController, NSURLSessionDownloadDelegate{
+class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessionDataDelegate{
     @IBOutlet var logTextView: UITextView!
     
     @IBOutlet var uploadImageView: UIImageView!
@@ -368,7 +368,7 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
         //将下载后的图片进行显示
         let imageData = NSData(contentsOfFile: newFilePath)
         dispatch_async(dispatch_get_main_queue()) { 
-            self.downloadImageView.image = UIImage.init(data: imageData!)
+            self.uploadImageView.image = UIImage.init(data: imageData!)
         }
     }
     
@@ -532,6 +532,113 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate{
         
         dataTask.resume()
     }
+    
+    
+    
+    
+    @IBAction func tapAuthenticationButton(sender: AnyObject) {
+        //let url = NSURL.init(string: "https://www.xinghuo365.com/index.shtml")
+        let url = NSURL.init(string: "https://kyfw.12306.cn/otn/regist/init")
+        
+        let request = NSMutableURLRequest.init(URL: url!)
+        
+        let session = NSURLSession.init(configuration: NSURLSessionConfiguration.defaultSessionConfiguration(), delegate: self, delegateQueue: NSOperationQueue.mainQueue())
+        
+        let sessionDataTask = session.dataTaskWithRequest(request) { (data, response, error) in
+            if data != nil {
+                let str = String.init(data: data!, encoding: NSUTF8StringEncoding)
+                self.showLog(str!)
+            }
+        }
+        
+        sessionDataTask.resume()
+    }
+    
+    
+    //MARK - NSURLSessionDataDelegate
+    
+    
+    /**
+     认证方式
+        NSURLAuthenticationMethodHTTPBasic：HTTP基本认证，需要提供用户名和密码
+        NSURLAuthenticationMethodHTTPDigest：HTTP数字认证，与基本认证相似需要用户名和密码
+        NSURLAuthenticationMethodClientCertificate: 客户端认证，需要客户端提供认证所需的证书
+        NSURLAuthenticationMethodServerTrust： 服务端认证，由认证请求的保护空间提供信任
+     */
+    
+    
+    
+    
+    /**
+     请求HTTPS数据时就会调用下方的代理方法
+     
+     - parameter session:           session
+     - parameter challenge:         授权质疑
+     - parameter completionHandler:
+     */
+    func URLSession(session: NSURLSession, didReceiveChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
+        //从保护空间中取出认证方式
+        let authenticationMethod = challenge.protectionSpace.authenticationMethod
+        showLog(authenticationMethod)
+        
+    
+        
+        
+        //判断认证方式是否为服务器信任
+        if authenticationMethod == NSURLAuthenticationMethodServerTrust {
+            showLog("服务器信任证书")
+            
+            
+            //处理策略
+            let disposition = NSURLSessionAuthChallengeDisposition.UseCredential
+            
+            //创建证书
+            let credential = NSURLCredential.init(forTrust: challenge.protectionSpace.serverTrust!)
+            
+            //安装证书
+            completionHandler(disposition, credential)
+            
+            return
+        }
+        
+        
+        /**
+         *  HTTP基本认证和数字认证
+         */
+        if authenticationMethod == NSURLAuthenticationMethodHTTPBasic {
+            
+         //     NSURLCredentialPersistence
+//            None ：要求 URL 载入系统 “在用完相应的认证信息后立刻丢弃”。
+//            ForSession ：要求 URL 载入系统 “在应用终止时，丢弃相应的 credential ”。
+//            Permanent ：要求 URL 载入系统 "将相应的认证信息存入钥匙串（keychain），以便其他应用也能使用。
+            let credential = NSURLCredential.init(user: "username", password: "password", persistence: NSURLCredentialPersistence.ForSession)
+            
+            //处理策略
+            let disposition = NSURLSessionAuthChallengeDisposition.UseCredential
+            
+            completionHandler(disposition, credential)
+            return
+        }
+        
+        
+        //取消请求
+        let disposition = NSURLSessionAuthChallengeDisposition.CancelAuthenticationChallenge
+        
+        //安装证书
+        completionHandler(disposition, nil)
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
