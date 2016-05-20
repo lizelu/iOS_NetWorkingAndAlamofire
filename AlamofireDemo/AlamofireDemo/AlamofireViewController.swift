@@ -144,14 +144,14 @@ class AlamofireViewController: UIViewController {
     }
     
     /**
-     上传图片到服务器，NSURLSessionUploadTask的使用
+     上传图片到服务器，Alamofire.upload的使用
      
      - parameter parameters: 上传到服务器的二进制文件
      */
     func uploadTask(parameters:NSData) {
         
-        //let uploadUrlString = "https://httpbin.org/post"
-        let uploadUrlString = "http://127.0.0.1/upload.php"
+        let uploadUrlString = "https://httpbin.org/post"
+       // let uploadUrlString = "http://127.0.0.1/upload.php"
     
         Alamofire.upload(.POST, uploadUrlString, data: parameters)
         .progress { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite) in
@@ -168,26 +168,46 @@ class AlamofireViewController: UIViewController {
                 self.progressView.progress = written/total
             })
         }
-        
-        
-        
-        Alamofire.upload(.POST, uploadUrlString, multipartFormData: { (MultipartFormData) in
-                parameters
-                parameters
-            }) { (encodingResult) in
-                switch encodingResult {
-                case .Success(let upload, _, _):
-            
-                   self.showLog(upload)
-                case .Failure(let encodingError):
-                    print(encodingError)
-                }
-        }
-}
+    }
     
 
     
     
+    @IBAction func tapDownloadButton(sender: AnyObject) {
+        
+        self.progressView.progress = 0
+        showLog("正在下载数据")
+        
+        let fileURLSting = "http://img3.91.com/uploads/allimg/140108/32-14010QK546.jpg"
+        
+        Alamofire.download(.GET, fileURLSting) { temporaryURL, response in
+            let fileManager = NSFileManager.defaultManager()
+            
+            //文件存储路径
+            let directoryURL = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
+            
+            //下载的文件名
+            let pathComponent = response.suggestedFilename
+            
+            self.showLog(directoryURL.URLByAppendingPathComponent(pathComponent!))
+            
+            //返回文件的存储路径及名称
+            return directoryURL.URLByAppendingPathComponent(pathComponent!)
+            }.progress { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite) in
+                
+                self.showLog("\n本次下载：\(bytesWritten)B")
+                self.showLog("已下载：\(totalBytesWritten)B")
+                self.showLog("文件总量：\(totalBytesExpectedToWrite)B")
+                
+                //获取进度
+                let written:Float = (Float)(totalBytesWritten)
+                let total:Float = (Float)(totalBytesExpectedToWrite)
+                
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.progressView.progress = written/total
+            })
+        }
+    }
     
     
     func showLog(info: AnyObject) {

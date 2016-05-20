@@ -652,8 +652,12 @@
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GM3-45-0zc">
                                 <rect key="frame" x="0.0" y="-2" width="150" height="2"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="212" id="9cy-He-Nh6"/>
-                                    <constraint firstAttribute="height" constant="2" id="ULZ-8U-xp3"/>
+                                    <constraint firstAttribute="width" constant="212" id="9cy-He-Nh6">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="354"/>
+                                    </constraint>
+                                    <constraint firstAttribute="height" constant="2" id="ULZ-8U-xp3">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="5"/>
+                                    </constraint>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -661,19 +665,44 @@
                                         <exclude reference="ULZ-8U-xp3"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="24" y="168" width="354" height="5"/>
                                     <mask key="constraints">
                                         <include reference="9cy-He-Nh6"/>
                                         <include reference="ULZ-8U-xp3"/>
                                     </mask>
                                 </variation>
                             </progressView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ky8-5g-5fe">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Mgz-lb-xea"/>
+                                    <constraint firstAttribute="width" constant="69" id="Yha-yl-Mgn"/>
+                                </constraints>
+                                <state key="normal" title="Download"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="Mgz-lb-xea"/>
+                                        <exclude reference="Yha-yl-Mgn"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="Mgz-lb-xea"/>
+                                        <include reference="Yha-yl-Mgn"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="tapDownloadButton:" destination="W1q-Jc-OmM" eventType="touchUpInside" id="GQV-Gv-c0S"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="AcQ-Nq-zaf" firstAttribute="leading" secondItem="sM5-yb-eKY" secondAttribute="trailing" constant="23" id="0ek-Ki-Nlt"/>
                             <constraint firstItem="Fzu-HZ-zlQ" firstAttribute="top" secondItem="ATW-Gt-qF0" secondAttribute="bottom" constant="8" id="4Sq-0w-4tb"/>
                             <constraint firstItem="GM3-45-0zc" firstAttribute="leading" secondItem="1HE-BU-cXn" secondAttribute="leadingMargin" constant="4" id="Bp0-HF-nVd"/>
+                            <constraint firstItem="ky8-5g-5fe" firstAttribute="leading" secondItem="AcQ-Nq-zaf" secondAttribute="trailing" constant="10" id="Dnt-Kx-JQS"/>
                             <constraint firstItem="J8E-eh-9U3" firstAttribute="top" secondItem="UNM-9v-LIy" secondAttribute="bottom" constant="19" id="ImM-1s-88d"/>
                             <constraint firstItem="ATW-Gt-qF0" firstAttribute="leading" secondItem="1HE-BU-cXn" secondAttribute="leadingMargin" id="PAy-WQ-g3v"/>
                             <constraint firstItem="AcQ-Nq-zaf" firstAttribute="top" secondItem="NCO-yZ-HIK" secondAttribute="bottom" constant="17" id="TAk-PG-mmB"/>
@@ -683,6 +712,7 @@
                             <constraint firstItem="GM3-45-0zc" firstAttribute="top" secondItem="AcQ-Nq-zaf" secondAttribute="bottom" constant="8" id="Xhd-lH-gAW"/>
                             <constraint firstItem="NCO-yZ-HIK" firstAttribute="leading" secondItem="J8E-eh-9U3" secondAttribute="trailing" constant="8" id="YMM-V7-HBJ"/>
                             <constraint firstItem="h0n-Io-WyI" firstAttribute="top" secondItem="UNM-9v-LIy" secondAttribute="bottom" constant="19" id="aPC-uv-H0S"/>
+                            <constraint firstItem="ky8-5g-5fe" firstAttribute="top" secondItem="h0n-Io-WyI" secondAttribute="bottom" constant="17" id="chW-d0-MbZ"/>
                             <constraint firstItem="sM5-yb-eKY" firstAttribute="leading" secondItem="1HE-BU-cXn" secondAttribute="leadingMargin" id="dEy-Fy-96b"/>
                             <constraint firstItem="xgr-DA-lCe" firstAttribute="leading" secondItem="c0R-8j-UyZ" secondAttribute="trailing" constant="10" id="e4E-89-HtN"/>
                             <constraint firstItem="xgr-DA-lCe" firstAttribute="top" secondItem="UNM-9v-LIy" secondAttribute="bottom" constant="19" id="etT-tj-i0e"/>
@@ -702,6 +732,7 @@
                                 <exclude reference="sM5-yb-eKY"/>
                                 <exclude reference="AcQ-Nq-zaf"/>
                                 <exclude reference="GM3-45-0zc"/>
+                                <exclude reference="ky8-5g-5fe"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="mAA-bc-kET"/>
@@ -718,6 +749,8 @@
                                 <exclude reference="v3D-b3-Zi0"/>
                                 <exclude reference="0ek-Ki-Nlt"/>
                                 <exclude reference="TAk-PG-mmB"/>
+                                <exclude reference="Dnt-Kx-JQS"/>
+                                <exclude reference="chW-d0-MbZ"/>
                                 <exclude reference="aPC-uv-H0S"/>
                                 <exclude reference="lMy-Kb-ujB"/>
                                 <exclude reference="PAy-WQ-g3v"/>
@@ -736,6 +769,7 @@
                                 <include reference="sM5-yb-eKY"/>
                                 <include reference="AcQ-Nq-zaf"/>
                                 <include reference="GM3-45-0zc"/>
+                                <include reference="ky8-5g-5fe"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="mAA-bc-kET"/>
@@ -752,6 +786,8 @@
                                 <include reference="v3D-b3-Zi0"/>
                                 <include reference="0ek-Ki-Nlt"/>
                                 <include reference="TAk-PG-mmB"/>
+                                <include reference="Dnt-Kx-JQS"/>
+                                <include reference="chW-d0-MbZ"/>
                                 <include reference="aPC-uv-H0S"/>
                                 <include reference="lMy-Kb-ujB"/>
                                 <include reference="PAy-WQ-g3v"/>
