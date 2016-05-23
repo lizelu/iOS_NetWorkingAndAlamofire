@@ -537,8 +537,8 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessi
     
     
     @IBAction func tapAuthenticationButton(sender: AnyObject) {
-        //let url = NSURL.init(string: "https://www.xinghuo365.com/index.shtml")
-        let url = NSURL.init(string: "https://kyfw.12306.cn/otn/regist/init")
+        let url = NSURL.init(string: "https://www.xinghuo365.com/index.shtml")
+        //let url = NSURL.init(string: "https://kyfw.12306.cn/otn/regist/init")
         
         let request = NSMutableURLRequest.init(URL: url!)
         
@@ -555,16 +555,32 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessi
     }
     
     
+    
+    
+    
+    
+    
+    
     //MARK - NSURLSessionDataDelegate
     
     
     /**
      认证方式
-        NSURLAuthenticationMethodHTTPBasic：HTTP基本认证，需要提供用户名和密码
-        NSURLAuthenticationMethodHTTPDigest：HTTP数字认证，与基本认证相似需要用户名和密码
+        NSURLAuthenticationMethodHTTPBasic: HTTP基本认证，需要提供用户名和密码
+        NSURLAuthenticationMethodHTTPDigest: HTTP数字认证，与基本认证相似需要用户名和密码
         NSURLAuthenticationMethodClientCertificate: 客户端认证，需要客户端提供认证所需的证书
-        NSURLAuthenticationMethodServerTrust： 服务端认证，由认证请求的保护空间提供信任
+        NSURLAuthenticationMethodServerTrust: 服务端认证，由认证请求的保护空间提供信任
      */
+    
+    /**
+     处理证书的策略: NSURLSessionAuthChallengeDisposition
+        NSURLSessionAuthChallengeDisposition -- 使用证书
+        PerformDefaultHandling -- 执行默认处理, 类似于该代理没有被实现一样，credential参数会被忽略
+        CancelAuthenticationChallenge -- 取消请求，credential参数同样会被忽略
+        RejectProtectionSpace -- 拒绝保护空间，重试下一次认证，credential参数同样会被忽略
+        
+     
+    */
     
     
     
