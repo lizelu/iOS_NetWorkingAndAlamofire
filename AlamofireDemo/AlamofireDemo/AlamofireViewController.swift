@@ -20,8 +20,6 @@ class AlamofireViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Alamofire"
-
-        // Do any additional setup after loading the view.
     }
     
     
@@ -68,6 +66,11 @@ class AlamofireViewController: UIViewController {
         
     }
     
+    /**
+     使用PUT请求
+     
+     - parameter sender:
+     */
     @IBAction func tapPUTButton(sender: AnyObject) {
         showLog("正在使用Alamofire进行put请求")
         
@@ -85,6 +88,12 @@ class AlamofireViewController: UIViewController {
 
     }
     
+    
+    /**
+     Patch请求
+     
+     - parameter sender:
+     */
     @IBAction func tapPatchButton(sender: AnyObject) {
         showLog("正在使用Alamofire进行Patch请求")
         
@@ -102,10 +111,14 @@ class AlamofireViewController: UIViewController {
 
     }
     
+    /**
+     URL编码
+     
+     - parameter sender:
+     */
     @IBAction func tapParameterEncodingButton(sender: AnyObject) {
         let URL = NSURL(string: "https://httpbin.org/get")!
         var request = NSMutableURLRequest(URL: URL)
-        
         
         let parameters = ["post": "value01",
                           "arr": ["元素1", "元素2"],
@@ -124,6 +137,11 @@ class AlamofireViewController: UIViewController {
     }
     
     
+    /**
+     上传图片
+     
+     - parameter sender:
+     */
     @IBAction func tapUploadButton(sender: AnyObject) {
         self.progressView.progress = 0
         showLog("正在上传数据")
@@ -172,7 +190,11 @@ class AlamofireViewController: UIViewController {
     
 
     
-    
+    /**
+     下载数据
+     
+     - parameter sender:
+     */
     @IBAction func tapDownloadButton(sender: AnyObject) {
         
         self.progressView.progress = 0
@@ -193,7 +215,8 @@ class AlamofireViewController: UIViewController {
             
             //返回文件的存储路径及名称
             return directoryURL.URLByAppendingPathComponent(pathComponent!)
-            }.progress { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite) in
+            }
+            .progress { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite) in
                 
                 self.showLog("\n本次下载：\(bytesWritten)B")
                 self.showLog("已下载：\(totalBytesWritten)B")
@@ -210,6 +233,42 @@ class AlamofireViewController: UIViewController {
     }
     
     
+    /**
+     使用Manager进行请求
+     
+     - parameter sender: <#sender description#>
+     */
+    @IBAction func tapManagerButton(sender: AnyObject) {
+        
+        showLog("正在使用Manager进行post请求")
+        
+        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let manager = Alamofire.Manager(configuration: configuration)
+        
+        let hostString = "https://httpbin.org/post"
+        let parameters = ["post": "value01",
+                          "arr": ["元素1", "元素2"],
+                          "dic":["key1":"value1", "key2":"value2"]]
+        
+        
+        manager.request(.POST, hostString, parameters: parameters, encoding: .URL, headers: [:])
+        
+        manager.request(.POST, hostString, parameters: parameters)
+            .responseJSON { (response) in
+                if let json = response.result.value {
+                    self.showLog("post字典:\(json)")
+                }
+        }
+    }
+    
+    
+    
+    
+    /**
+     输出日志
+     
+     - parameter info: 日志内容
+     */
     func showLog(info: AnyObject) {
         
         let log = "\(info)"
