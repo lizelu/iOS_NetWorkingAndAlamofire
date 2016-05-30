@@ -28,7 +28,7 @@ import Foundation
     Responsible for creating and managing `Request` objects, as well as their underlying `NSURLSession`.
 */
 
-/// 负责创建和管理“Request”对象，其实还是对“NSURLSession”的管理
+/// 负责创建和管理“Request”对象，以及“NSURLSession”对象的创建
 public class Manager {
 
     // MARK: - Properties
@@ -96,6 +96,7 @@ public class Manager {
         ]
     }()
 
+    //创建的串行队列
     let queue = dispatch_queue_create(nil, DISPATCH_QUEUE_SERIAL)
 
     /// The underlying session.
@@ -202,8 +203,13 @@ public class Manager {
         headers: [String: String]? = nil)
         -> Request
     {
+        //创建NSMutableURLRequest
         let mutableURLRequest = URLRequest(method, URLString, headers: headers)
+        
+        //将参数进行编码，并与mutableURLRequest进行关联，返回带有编码参数的mutableURLRequest
         let encodedURLRequest = encoding.encode(mutableURLRequest, parameters: parameters).0
+        
+        //调用request()进行网络请求
         return request(encodedURLRequest)
     }
 
@@ -218,11 +224,17 @@ public class Manager {
     */
     public func request(URLRequest: URLRequestConvertible) -> Request {
         var dataTask: NSURLSessionDataTask!
-        dispatch_sync(queue) { dataTask = self.session.dataTaskWithRequest(URLRequest.URLRequest) }
+        
+        //在当前线程的串行队列中创建NSURLSessionDataTask对象
+        dispatch_sync(queue) {
+            dataTask = self.session.dataTaskWithRequest(URLRequest.URLRequest)
+        }
 
         let request = Request(session: session, task: dataTask)
+        
         delegate[request.delegate.task] = request.delegate
 
+        //是否立即发起网络请求，默认为true
         if startRequestsImmediately {
             request.resume()
         }
@@ -230,6 +242,12 @@ public class Manager {
         return request
     }
 
+    
+    
+    
+    
+    
+    
     // MARK: - SessionDelegate
 
     /**

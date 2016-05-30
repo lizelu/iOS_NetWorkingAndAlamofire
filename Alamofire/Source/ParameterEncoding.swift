@@ -61,6 +61,8 @@ public enum Method: String {
     - `Custom`:          Uses the associated closure value to construct a new request given an existing request and
                          parameters.
 */
+
+//属性编码枚举
 public enum ParameterEncoding {
     case URL
     case URLEncodedInURL
@@ -77,6 +79,8 @@ public enum ParameterEncoding {
         - returns: A tuple containing the constructed request and the error that occurred during parameter encoding, 
                    if any.
     */
+    
+    //编码函数
     public func encode(
         URLRequest: URLRequestConvertible,
         parameters: [String: AnyObject]?)
@@ -89,10 +93,23 @@ public enum ParameterEncoding {
         var encodingError: NSError? = nil
 
         switch self {
+            
+        //将字典参数进行URL编码
         case .URL, .URLEncodedInURL:
+            
+            /**
+             将传入的参数进行URL编码
+             
+             - parameter parameters: 字典类型的参数
+             
+             - returns: 通过URL编码后的字符串
+             */
             func query(parameters: [String: AnyObject]) -> String {
+                
+                //将字典中的每个Key-Value以元组的形式存入数组中
                 var components: [(String, String)] = []
 
+                //遍历参数
                 for key in parameters.keys.sort(<) {
                     let value = parameters[key]!
                     components += queryComponents(key, value)
