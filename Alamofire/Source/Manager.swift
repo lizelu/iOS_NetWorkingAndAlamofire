@@ -27,6 +27,8 @@ import Foundation
 /**
     Responsible for creating and managing `Request` objects, as well as their underlying `NSURLSession`.
 */
+
+/// 负责创建和管理“Request”对象，其实还是对“NSURLSession”的管理
 public class Manager {
 
     // MARK: - Properties
@@ -34,16 +36,29 @@ public class Manager {
     /**
         A shared instance of `Manager`, used by top-level Alamofire request methods, and suitable for use directly 
         for any ad hoc requests.
+        
+        Manager类的单例，默认的NSURLSessionConfiguration是默认defaultSessionConfiguration
     */
     public static let sharedInstance: Manager = {
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
         configuration.HTTPAdditionalHeaders = Manager.defaultHTTPHeaders
 
+        print(Manager.defaultHTTPHeaders)
+        
         return Manager(configuration: configuration)
     }()
 
     /**
         Creates default values for the "Accept-Encoding", "Accept-Language" and "User-Agent" headers.
+     
+        创建默认的请求头的部分信息，主要设置了:
+            Accept-Encoding -- 声明浏览器支持的编码类型
+            Accept-Language -- 告诉服务器浏览器可以支持什么语言
+            User-Agent -- 向访问网站提供你所使用的浏览器类型、操作系统及版本、CPU 类型、浏览器渲染引擎、浏览器语言、浏览器插件等信息的标识
+     
+         ["Accept-Encoding": "gzip;q=1.0, compress;q=0.5",
+         "User-Agent": "AlamofireDemo/ZeluLi.AlamofireDemo (1; OS Version 9.3 (Build 13E230))", 
+         "Accept-Language": "en-US;q=1.0"]
     */
     public static let defaultHTTPHeaders: [String: String] = {
         // Accept-Encoding HTTP Header; see https://tools.ietf.org/html/rfc7230#section-4.2.3

@@ -12,6 +12,9 @@ import Alamofire
 
 //网络测试地址http://jsonplaceholder.typicode.com/
 
+public enum MethodTest: String {
+    case OPTIONS, GET, HEAD, POST, PUT, PATCH, DELETE, TRACE, CONNECT
+}
 
 class AlamofireViewController: UIViewController {
     @IBOutlet var logTextView: UITextView!
@@ -20,6 +23,16 @@ class AlamofireViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Alamofire"
+        
+        
+        print(MethodTest.POST.rawValue)
+        
+        
+        //获取Manager的单例对象，并输出对象地址
+        print(unsafeAddressOf(Alamofire.Manager.sharedInstance))
+        print(unsafeAddressOf(Alamofire.Manager.sharedInstance))
+        print(unsafeAddressOf(Alamofire.Manager.sharedInstance))
+    
     }
     
     
@@ -261,6 +274,16 @@ class AlamofireViewController: UIViewController {
         }
     }
     
+    
+    @IBAction func tapReachabilityButton(sender: AnyObject) {
+        let manager = NetworkReachabilityManager(host: "www.apple.com")
+        
+        manager?.listener = { status in
+            print("网络状态: \(status)")
+        }
+        
+        manager?.startListening()
+    }
     
     
     

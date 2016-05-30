@@ -39,6 +39,9 @@ public protocol URLStringConvertible {
         See https://tools.ietf.org/html/rfc2396
         See https://tools.ietf.org/html/rfc1738
         See https://tools.ietf.org/html/rfc1808
+     
+        中文RFC请参见：http://man.chinaunix.net/develop/rfc/RFC1738.txt
+        //URL只能用US-ASCII字符编码集中的可显示字符表示。
     */
     var URLString: String { get }
 }
@@ -85,6 +88,17 @@ extension NSURLRequest: URLRequestConvertible {
 
 // MARK: - Convenience
 
+/**
+ 该方法根据请求类型以及请求链接和headers创建NSMutableURLRequest对象
+ 
+ 网络请求的便利方法，该方法是internal类型的，在外部不可调用
+ 
+ - parameter method:    网络请求的方式
+ - parameter URLString: 遵循URLStringConvertible协议的所有类型的对象
+ - parameter headers:   网络请求的报文，类型是key,value都为字符串的字典
+ 
+ - returns: NSMutableURLRequest类型的对象
+ */
 func URLRequest(
     method: Method,
     _ URLString: URLStringConvertible,
@@ -93,7 +107,8 @@ func URLRequest(
 {
     let mutableURLRequest = NSMutableURLRequest(URL: NSURL(string: URLString.URLString)!)
     mutableURLRequest.HTTPMethod = method.rawValue
-
+    
+    //遍历Header字典，为请求设置请求头
     if let headers = headers {
         for (headerField, headerValue) in headers {
             mutableURLRequest.setValue(headerValue, forHTTPHeaderField: headerField)
