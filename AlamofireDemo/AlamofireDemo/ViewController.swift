@@ -10,7 +10,7 @@ import UIKit
 
 let kFileTempData = "FileTempData"
 
-class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessionDataDelegate{
+class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessionDataDelegate, NSURLSessionStreamDelegate{
     @IBOutlet var logTextView: UITextView!
     
     @IBOutlet var uploadImageView: UIImageView!
@@ -83,7 +83,8 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessi
         
         let url: NSURL = NSURL.init(string: hostString)!
         let request: NSMutableURLRequest = NSMutableURLRequest.init(URL: url)
-        request.HTTPMethod = method
+        request.HTTPMethod = method //指定请求方式
+        
         
         /**
          *  POST方法就将参数放到HTTPBody中
@@ -110,12 +111,21 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessi
         sessionTask.resume()
         
         
-        //使用NSURLSessionDataDelegate
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let session01 = NSURLSession.init(configuration: sessionConfig, delegate: self, delegateQueue: nil)
-        let sessionTask01 = session01.dataTaskWithRequest(request)
         
-        sessionTask01.resume()
+        
+        
+        //代理+Cache
+        let fileUrl: NSURL? = NSURL(string: "http://www.baidu.com")
+        let requestFile: NSMutableURLRequest = NSMutableURLRequest(URL: fileUrl!)
+        
+        requestFile.cachePolicy = .ReturnCacheDataElseLoad  //指定缓存策略
+        
+        //使用NSURLSessionDataDelegate处理相应数据
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let sessionWithDelegate = NSURLSession.init(configuration: sessionConfig, delegate: self, delegateQueue: nil)
+        let sessionDataTask = sessionWithDelegate.dataTaskWithRequest(requestFile)
+        
+        sessionDataTask.resume()
     }
     
     
@@ -127,107 +137,13 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessi
      - parameter sender: 
      */
     @IBAction func tapURLEncodeButton(sender: AnyObject) {
-         showLog("URL编码测试")
+        showLog("URL编码测试")
         let parameters = ["post": "value01",
                           "arr": ["元素1", "元素2"],
                           "dic":["key1":"value1", "key2":"value2"]]
         showLog(query(parameters))
     }
     
-    
-    // - MARK - Alamofire中的三个方法该方法将字典转换成json串
-    func query(parameters: [String: AnyObject]) -> String {
-        
-        var components: [(String, String)] = []     //存有元组的数组，元组由ULR中的(key, value)组成
-        
-        //遍历参数字典
-        for key in parameters.keys.sort(<) {
-            let value = parameters[key]!
-            components += queryComponents(key, value)
-        }
-        
-        return (components.map { "\($0)=\($1)" } as [String]).joinWithSeparator("&")
-    }
-    
-    
-    func queryComponents(key: String, _ value: AnyObject) -> [(String, String)] {
-        var components: [(String, String)] = []
-        
-        
-        if let dictionary = value as? [String: AnyObject] {         //value为字典的情况, 递归调用
-            for (nestedKey, value) in dictionary {
-                components += queryComponents("\(key)[\(nestedKey)]", value)
-            }
-        } else if let array = value as? [AnyObject] {               //value为数组的情况, 递归调用
-            for value in array {
-                components += queryComponents("\(key)[]", value)
-            }
-        } else {
-            components.append((escape(key), escape("\(value)")))    //vlalue为字符串的情况，进行转义，上面两种情况最终会递归到此情况而结束
-        }
-        
-        return components
-    }
-    
-    /**
-     
-     - parameter string: 要转义的字符串
-     
-     - returns: 转义后的字符串
-     */
-    func escape(string: String) -> String {
-        /*
-         :用于分隔协议和主机，/用于分隔主机和路径，?用于分隔路径和查询参数, #用于分隔查询与碎片
-         */
-        let generalDelimitersToEncode = ":#[]@" // does not include "?" or "/" due to RFC 3986 - Section 3.4
-        
-        //组件中的分隔符：如=用于表示查询参数中的键值对，&符号用于分隔查询多个键值对
-        let subDelimitersToEncode = "!$&'()*+,;="
-        
-        let allowedCharacterSet = NSCharacterSet.URLQueryAllowedCharacterSet().mutableCopy() as! NSMutableCharacterSet
-        allowedCharacterSet.removeCharactersInString(generalDelimitersToEncode + subDelimitersToEncode)
-        
-        
-        var escaped = ""
-        
-        //==========================================================================================================
-        //
-        //  Batching is required for escaping due to an internal bug in iOS 8.1 and 8.2. Encoding more than a few
-        //  hundred Chinese characters causes various malloc error crashes. To avoid this issue until iOS 8 is no
-        //  longer supported, batching MUST be used for encoding. This introduces roughly a 20% overhead. For more
-        //  info, please refer to:
-        //
-        //      - https://github.com/Alamofire/Alamofire/issues/206
-        //
-        //==========================================================================================================
-        
-        if #available(iOS 8.3, OSX 10.10, *) {
-            escaped = string.stringByAddingPercentEncodingWithAllowedCharacters(allowedCharacterSet) ?? string
-        } else {
-            let batchSize = 50      //一次转义的字符数
-            var index = string.startIndex
-            
-            while index != string.endIndex {
-                let startIndex = index
-                let endIndex = index.advancedBy(batchSize, limit: string.endIndex)
-                let range = startIndex..<endIndex
-                
-                let substring = string.substringWithRange(range)
-                
-                escaped += substring.stringByAddingPercentEncodingWithAllowedCharacters(allowedCharacterSet) ?? substring
-                
-                index = endIndex
-            }
-        }
-        
-        return escaped
-    }
-    
-
-    
-    
-    
-
     
     
     
@@ -336,87 +252,6 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessi
         })
     }
     
-
-    // MARK --NSURLSessionDownloadDelegate
-    /**
-     下载完成后执行的代理
-     
-     - parameter session:      session对象
-     - parameter downloadTask: downloadTask对象
-     - parameter location:     本地URL
-     */
-    func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
-        
-        NSUserDefaults.standardUserDefaults().removeObjectForKey(kFileTempData)
-        self.downloadData = nil
-        
-        showLog("下载的临时文件路径:\(location)")                //输出下载文件临时目录
-       
-        guard let tempFilePath: String = location.path else {
-            return
-        }
-       
-        //创建文件存储路径
-        let newFileName = String(UInt(NSDate().timeIntervalSince1970))
-        let newFilePath: String = NSHomeDirectory() + "/Documents/\(newFileName).png"
-        
-        //创建文件管理器
-        let fileManager:NSFileManager = NSFileManager.defaultManager()
-        
-        try! fileManager.moveItemAtPath(tempFilePath, toPath: newFilePath)
-        showLog("将临时文件进行存储，路径为:\(newFilePath)")
-        
-        //将下载后的图片进行显示
-        let imageData = NSData(contentsOfFile: newFilePath)
-        dispatch_async(dispatch_get_main_queue()) { 
-            self.uploadImageView.image = UIImage.init(data: imageData!)
-        }
-    }
-    
-    /**
-     实时监听下载任务回调
-     
-     - parameter session:                   session对象
-     - parameter downloadTask:              下载任务
-     - parameter bytesWritten:              本次接收
-     - parameter totalBytesWritten:         总共接收
-     - parameter totalBytesExpectedToWrite: 总量
-     */
-    func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-        
-        showLog("\n本次接收：\(bytesWritten)B")
-        showLog("已下载：\(totalBytesWritten)B")
-        showLog("文件总量：\(totalBytesExpectedToWrite)B")
-        
-        //获取进度
-        let written:Float = (Float)(totalBytesWritten)
-        let total:Float = (Float)(totalBytesExpectedToWrite)
-        dispatch_async(dispatch_get_main_queue()) { 
-            self.downloadProgressView.progress = written/total
-        }
-        
-    }
-    
-    /**
-     下载偏移，主要用于暂停续传
-     
-     - parameter session:
-     - parameter downloadTask:
-     - parameter fileOffset:
-     - parameter expectedTotalBytes:
-     */
-    func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didResumeAtOffset fileOffset: Int64, expectedTotalBytes: Int64) {
-
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
@@ -445,7 +280,6 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessi
         
         request.cachePolicy = .ReturnCacheDataElseLoad
         let session: NSURLSession = NSURLSession.sharedSession()
-        
         let dataTask: NSURLSessionDataTask = session.dataTaskWithRequest(request) { (data, response, error) in
             if data != nil {
                 self.showLog(String.init(data: data!, encoding: NSUTF8StringEncoding)!)
@@ -558,11 +392,15 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessi
     
     
     
+
     
     
     
     
-    //MARK - NSURLSessionDelegate
+    
+    
+    
+    //MARK - NSURLSessionDelegate-----------------
     
     
     /**
@@ -651,31 +489,216 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessi
     
     
     
-    // MARK -- NSURLSessionDataDelegate
+    // MARK -- NSURLSessionDataDelegate===========================
+    
     func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveResponse response: NSURLResponse, completionHandler: (NSURLSessionResponseDisposition) -> Void) {
-        print(response)
+        showLog("响应头：\(response)")
+        
+        /**
+         *  .Cancel 取消加载，默认为 .Cancel
+         *  .Allow 允许继续操作, 会执行 dataTaskDidReceiveData回调方法
+         *  .BecomeDownload 将请求转变为DownloadTask，会执行NSURLSessionDownloadDelegate
+         *  .BecomeStream 将请求变成StreamTask，会执行NSURLSessionStreamDelegate
+         */
+        
+//        completionHandler(.Cancel)
         completionHandler(.Allow)
+//        completionHandler(.BecomeDownload)
+//        if #available(iOS 9.0, *) {
+//            completionHandler(.BecomeStream)
+//        } else {
+//            // Fallback on earlier versions
+//        }
     }
     
     
+    
+    
+    /**
+     在执行dataTask时，接收数据后会调用下方的方法
+     
+     - parameter session:
+     - parameter dataTask:
+     - parameter data:     接收的数据
+     */
     func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveData data: NSData) {
         
-        let json = try? NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments)
-        self.showLog(json!)
+        if let str = String.init(data: data, encoding: NSUTF8StringEncoding) {
+            showLog(str)
+        }
+    }
+
+    
+    /**
+     变成DownLoadTask会调用的方法
+     
+     - parameter session:
+     - parameter dataTask:
+     - parameter downloadTask:
+     */
+    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didBecomeDownloadTask downloadTask: NSURLSessionDownloadTask) {
+        showLog("任务已经变成DownLoadTask")
+    }
+    
+    /**
+     *  变成StreamTask会调用下方的方法
+     */
+    @available(iOS 9.0, *)
+    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didBecomeStreamTask streamTask: NSURLSessionStreamTask) {
+        showLog("任务已经变成StreamTask")
+    }
+    
+    
+    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, willCacheResponse proposedResponse: NSCachedURLResponse, completionHandler: (NSCachedURLResponse?) -> Void) {
+        print(proposedResponse)
+        completionHandler(proposedResponse)
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // MARK ------------NSURLSessionDownloadDelegate------------------
+    /**
+     下载完成后执行的代理
+     
+     - parameter session:      session对象
+     - parameter downloadTask: downloadTask对象
+     - parameter location:     本地URL
+     */
+    func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
+        
+        print(downloadTask)
+        
+        NSUserDefaults.standardUserDefaults().removeObjectForKey(kFileTempData)
+        self.downloadData = nil
+        
+        showLog("下载的临时文件路径:\(location)")                //输出下载文件临时目录
+        
+        guard let tempFilePath: String = location.path else {
+            return
+        }
+        
+        //创建文件存储路径
+        let newFileName = String(UInt(NSDate().timeIntervalSince1970))
+        var newFileExtensionName = "txt"
+        
+        if downloadTask == self.downloadTask {
+            newFileExtensionName = "png"
+        }
+        
+        let newFilePath: String = NSHomeDirectory() + "/Documents/\(newFileName).\(newFileExtensionName)"
+        
+        //创建文件管理器
+        let fileManager:NSFileManager = NSFileManager.defaultManager()
+        
+        try! fileManager.moveItemAtPath(tempFilePath, toPath: newFilePath)
+        showLog("将临时文件进行存储，路径为:\(newFilePath)")
+        
+        
+        if downloadTask == self.downloadTask {
+            //将下载后的图片进行显示
+            let imageData = NSData(contentsOfFile: newFilePath)
+            dispatch_async(dispatch_get_main_queue()) {
+                self.uploadImageView.image = UIImage.init(data: imageData!)
+            }
+
+        }
+    }
+    
+    /**
+     实时监听下载任务回调
+     
+     - parameter session:                   session对象
+     - parameter downloadTask:              下载任务
+     - parameter bytesWritten:              本次接收
+     - parameter totalBytesWritten:         总共接收
+     - parameter totalBytesExpectedToWrite: 总量
+     */
+    func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+        
+        showLog("\n本次接收：\(bytesWritten)B")
+        showLog("已下载：\(totalBytesWritten)B")
+        showLog("文件总量：\(totalBytesExpectedToWrite)B")
+        
+        //获取进度
+        let written:Float = (Float)(totalBytesWritten)
+        let total:Float = (Float)(totalBytesExpectedToWrite)
+        dispatch_async(dispatch_get_main_queue()) {
+            self.downloadProgressView.progress = written/total
+        }
+        
+    }
+    
+    /**
+     下载偏移，主要用于暂停续传
+     
+     - parameter session:
+     - parameter downloadTask:
+     - parameter fileOffset:
+     - parameter expectedTotalBytes:
+     */
+    func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didResumeAtOffset fileOffset: Int64, expectedTotalBytes: Int64) {
         
     }
 
     
-    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didBecomeDownloadTask downloadTask: NSURLSessionDownloadTask) {
+    
+    
+    
+    
+    
+    //MARK -- NSURLSessionStreamDelegate----------------------------------------
+    
+    
+    /**
+     当StreamTask进行closeRead时会执行该代理方法
+     
+     - parameter session:
+     - parameter streamTask:
+     */
+    @available(iOS 9.0, *)
+    func URLSession(session: NSURLSession, readClosedForStreamTask streamTask: NSURLSessionStreamTask) {
+        
+        //因为read已经被关闭了，所以下方的闭包是不会执行的
+        streamTask.readDataOfMinLength(0, maxLength: 1024*1024, timeout: 0) { (data, bool, error) in
+            print(streamTask.countOfBytesReceived)
+        }
+
+    }
+    
+    @available(iOS 9.0, *)
+    func URLSession(session: NSURLSession, writeClosedForStreamTask streamTask: NSURLSessionStreamTask) {
+        
+        //读取流，数据，并进行二进制解析
+        streamTask.readDataOfMinLength(0, maxLength: 1024*1024, timeout: 0) { (data, bool, error) in
+            print(streamTask.countOfBytesReceived)
+            print(data)
+            let json = try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments)
+            self.showLog(json!)
+        }
+        streamTask.closeRead();
+        
         
     }
     
     @available(iOS 9.0, *)
-    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didBecomeStreamTask streamTask: NSURLSessionStreamTask) {
+    func URLSession(session: NSURLSession, betterRouteDiscoveredForStreamTask streamTask: NSURLSessionStreamTask) {
+        
+        
+        
         
     }
     
-    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, willCacheResponse proposedResponse: NSCachedURLResponse, completionHandler: (NSCachedURLResponse?) -> Void) {
+    @available(iOS 9.0, *)
+    func URLSession(session: NSURLSession, streamTask: NSURLSessionStreamTask, didBecomeInputStream inputStream: NSInputStream, outputStream: NSOutputStream) {
         
     }
     
@@ -688,6 +711,104 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessi
     
     
     
+    
+    
+    
+    // - MARK - Alamofire中的三个方法该方法将字典转换成json串
+    func query(parameters: [String: AnyObject]) -> String {
+        
+        var components: [(String, String)] = []     //存有元组的数组，元组由ULR中的(key, value)组成
+        
+        //遍历参数字典
+        for key in parameters.keys.sort(<) {
+            let value = parameters[key]!
+            components += queryComponents(key, value)
+        }
+        
+        return (components.map { "\($0)=\($1)" } as [String]).joinWithSeparator("&")
+    }
+    
+    
+    func queryComponents(key: String, _ value: AnyObject) -> [(String, String)] {
+        var components: [(String, String)] = []
+        
+        
+        if let dictionary = value as? [String: AnyObject] {         //value为字典的情况, 递归调用
+            for (nestedKey, value) in dictionary {
+                components += queryComponents("\(key)[\(nestedKey)]", value)
+            }
+        } else if let array = value as? [AnyObject] {               //value为数组的情况, 递归调用
+            for value in array {
+                components += queryComponents("\(key)[]", value)
+            }
+        } else {
+            components.append((escape(key), escape("\(value)")))    //vlalue为字符串的情况，进行转义，上面两种情况最终会递归到此情况而结束
+        }
+        
+        return components
+    }
+    
+    /**
+     
+     - parameter string: 要转义的字符串
+     
+     - returns: 转义后的字符串
+     */
+    func escape(string: String) -> String {
+        /*
+         :用于分隔协议和主机，/用于分隔主机和路径，?用于分隔路径和查询参数, #用于分隔查询与碎片
+         */
+        let generalDelimitersToEncode = ":#[]@" // does not include "?" or "/" due to RFC 3986 - Section 3.4
+        
+        //组件中的分隔符：如=用于表示查询参数中的键值对，&符号用于分隔查询多个键值对
+        let subDelimitersToEncode = "!$&'()*+,;="
+        
+        let allowedCharacterSet = NSCharacterSet.URLQueryAllowedCharacterSet().mutableCopy() as! NSMutableCharacterSet
+        allowedCharacterSet.removeCharactersInString(generalDelimitersToEncode + subDelimitersToEncode)
+        
+        
+        var escaped = ""
+        
+        //==========================================================================================================
+        //
+        //  Batching is required for escaping due to an internal bug in iOS 8.1 and 8.2. Encoding more than a few
+        //  hundred Chinese characters causes various malloc error crashes. To avoid this issue until iOS 8 is no
+        //  longer supported, batching MUST be used for encoding. This introduces roughly a 20% overhead. For more
+        //  info, please refer to:
+        //
+        //      - https://github.com/Alamofire/Alamofire/issues/206
+        //
+        //==========================================================================================================
+        
+        if #available(iOS 8.3, OSX 10.10, *) {
+            escaped = string.stringByAddingPercentEncodingWithAllowedCharacters(allowedCharacterSet) ?? string
+        } else {
+            let batchSize = 50      //一次转义的字符数
+            var index = string.startIndex
+            
+            while index != string.endIndex {
+                let startIndex = index
+                let endIndex = index.advancedBy(batchSize, limit: string.endIndex)
+                let range = startIndex..<endIndex
+                
+                let substring = string.substringWithRange(range)
+                
+                escaped += substring.stringByAddingPercentEncodingWithAllowedCharacters(allowedCharacterSet) ?? substring
+                
+                index = endIndex
+            }
+        }
+        
+        return escaped
+    }
+    
+    
+    
+    
+    
+    
+    
+
     
     
     
@@ -728,6 +849,7 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessi
         
         
     }
+    
     
     
     override func didReceiveMemoryWarning() {
