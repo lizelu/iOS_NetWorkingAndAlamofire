@@ -58,6 +58,7 @@ public class Request {
     init(session: NSURLSession, task: NSURLSessionTask) {
         self.session = session
 
+        //根据SessionTask的类型来设置代理对象
         switch task {
         case is NSURLSessionUploadTask:
             delegate = UploadTaskDelegate(task: task)
@@ -76,6 +77,8 @@ public class Request {
 
     /**
         Associates an HTTP Basic credential with the request.
+     
+        //HTTP基础认证，需要用户名和密码
 
         - parameter user:        The user.
         - parameter password:    The password.

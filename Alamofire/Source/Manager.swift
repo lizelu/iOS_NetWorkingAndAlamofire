@@ -232,8 +232,11 @@ public class Manager {
 
         let request = Request(session: session, task: dataTask)
         
+        
+        //将Request中的TaskDelegate对象，存入Manager中SessionDelegate对象的subdelegates字典中
         delegate[request.delegate.task] = request.delegate
 
+        
         //是否立即发起网络请求，默认为true
         if startRequestsImmediately {
             request.resume()
@@ -254,19 +257,32 @@ public class Manager {
         Responsible for handling all delegate callbacks for the underlying session.
     */
     public class SessionDelegate: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, NSURLSessionDataDelegate, NSURLSessionDownloadDelegate {
+        //存储的是所有的TaskDelegate的字典
         private var subdelegates: [Int: Request.TaskDelegate] = [:]
+        
+        //创建并行队列
         private let subdelegateQueue = dispatch_queue_create(nil, DISPATCH_QUEUE_CONCURRENT)
 
         /// Access the task delegate for the specified task in a thread-safe manner.
+        //通过下标的形式设置和获取subdelegates的值
         public subscript(task: NSURLSessionTask) -> Request.TaskDelegate? {
+            
             get {
                 var subdelegate: Request.TaskDelegate?
-                dispatch_sync(subdelegateQueue) { subdelegate = self.subdelegates[task.taskIdentifier] }
+                
+                //在同步执行的并行队列只能怪去获取subdelegates字典中的元素
+                dispatch_sync(subdelegateQueue) {
+                    subdelegate = self.subdelegates[task.taskIdentifier]
+                }
 
                 return subdelegate
             }
+            
             set {
-                dispatch_barrier_async(subdelegateQueue) { self.subdelegates[task.taskIdentifier] = newValue }
+                //在队列栅栏中设置subdelegates的值
+                dispatch_barrier_async(subdelegateQueue) {
+                    self.subdelegates[task.taskIdentifier] = newValue
+                }
             }
         }
 
@@ -279,6 +295,10 @@ public class Manager {
             super.init()
         }
 
+        
+        
+        // MARK: - 将NSURLSessionDelegate中的代理方法使用闭包的形式进行替换
+        
         // MARK: - NSURLSessionDelegate
 
         // MARK: Override Closures
@@ -319,17 +339,22 @@ public class Manager {
             didReceiveChallenge challenge: NSURLAuthenticationChallenge,
             completionHandler: ((NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void))
         {
+            
+            //如果sessionDidReceiveChallengeWithCompletion不为空的话就执行sessionDidReceiveChallengeWithCompletion闭包
             guard sessionDidReceiveChallengeWithCompletion == nil else {
                 sessionDidReceiveChallengeWithCompletion?(session, challenge, completionHandler)
                 return
             }
 
+            //指定认证处置策略
             var disposition: NSURLSessionAuthChallengeDisposition = .PerformDefaultHandling
             var credential: NSURLCredential?
 
+            //如果sessionDidReceiveChallenge不为空，那么就使用sessionDidReceiveChallenge闭包返回的completionHandler。
             if let sessionDidReceiveChallenge = sessionDidReceiveChallenge {
                 (disposition, credential) = sessionDidReceiveChallenge(session, challenge)
-            } else if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {
+            } else if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {//保护控件中的认证方式是服务器认证
+                
                 let host = challenge.protectionSpace.host
 
                 if let
@@ -357,6 +382,14 @@ public class Manager {
             sessionDidFinishEventsForBackgroundURLSession?(session)
         }
 
+        
+        
+        
+        
+        
+        
+        // MARK: - 将NSURLSessionTaskDelegate中的代理方法使用闭包的形式进行替换
+        
         // MARK: - NSURLSessionTaskDelegate
 
         // MARK: Override Closures
