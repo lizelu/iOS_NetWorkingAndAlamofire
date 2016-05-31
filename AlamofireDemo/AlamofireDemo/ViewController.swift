@@ -93,6 +93,7 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessi
         }
         
         
+        //使用Block进行解析
         let session: NSURLSession = NSURLSession.sharedSession()
         
         let sessionTask: NSURLSessionDataTask = session.dataTaskWithRequest(request, completionHandler: { (data, response, error) in
@@ -107,6 +108,14 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessi
         });
         
         sessionTask.resume()
+        
+        
+        //使用NSURLSessionDataDelegate
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let session01 = NSURLSession.init(configuration: sessionConfig, delegate: self, delegateQueue: nil)
+        let sessionTask01 = session01.dataTaskWithRequest(request)
+        
+        sessionTask01.resume()
     }
     
     
@@ -218,15 +227,7 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessi
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-   
+
     
     
     
@@ -561,7 +562,7 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessi
     
     
     
-    //MARK - NSURLSessionDataDelegate
+    //MARK - NSURLSessionDelegate
     
     
     /**
@@ -650,6 +651,39 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessi
     
     
     
+    // MARK -- NSURLSessionDataDelegate
+    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveResponse response: NSURLResponse, completionHandler: (NSURLSessionResponseDisposition) -> Void) {
+        print(response)
+        completionHandler(.Allow)
+    }
+    
+    
+    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveData data: NSData) {
+        
+        let json = try? NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments)
+        self.showLog(json!)
+        
+    }
+
+    
+    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didBecomeDownloadTask downloadTask: NSURLSessionDownloadTask) {
+        
+    }
+    
+    @available(iOS 9.0, *)
+    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didBecomeStreamTask streamTask: NSURLSessionStreamTask) {
+        
+    }
+    
+    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, willCacheResponse proposedResponse: NSCachedURLResponse, completionHandler: (NSCachedURLResponse?) -> Void) {
+        
+    }
+    
+    
+    
+    
+    
+    
     
     
     
@@ -664,21 +698,34 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessi
     
     func showLog(info: AnyObject) {
         
-        let log = "\(info)"
-        print(log)
+        let serial: dispatch_queue_t = dispatch_queue_create("test", DISPATCH_QUEUE_SERIAL)
         
-        let logs = self.logTextView.text
-        let newlogs = String((logs + "\n"+log)).stringByReplacingOccurrencesOfString("\\n", withString: "\n")
         
-        dispatch_async(dispatch_get_main_queue()) { 
-            self.logTextView.text = newlogs
+        let semaphore: dispatch_semaphore_t = dispatch_semaphore_create(1)
+        
+        dispatch_async(serial) {
             
-            let length = newlogs.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)
-            if length > 0 {
-                let range: NSRange = NSMakeRange(length-1, 1)
-                self.logTextView.scrollRangeToVisible(range)
+            dispatch_semaphore_wait(semaphore, 0)
+            
+            let log = "\(info)"
+            print(log)
+            
+            let logs = self.logTextView.text
+            let newlogs = String((logs + "\n"+log)).stringByReplacingOccurrencesOfString("\\n", withString: "\n")
+            
+            dispatch_async(dispatch_get_main_queue()) {
+                self.logTextView.text = newlogs
+                
+                let length = newlogs.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)
+                if length > 0 {
+                    let range: NSRange = NSMakeRange(length-1, 1)
+                    self.logTextView.scrollRangeToVisible(range)
+                }
             }
+            
+            dispatch_semaphore_signal(semaphore)
         }
+        
         
     }
     

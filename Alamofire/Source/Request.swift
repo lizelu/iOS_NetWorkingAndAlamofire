@@ -83,6 +83,11 @@ public class Request {
         - parameter user:        The user.
         - parameter password:    The password.
         - parameter persistence: The URL credential persistence. `.ForSession` by default.
+                
+                .None 不会存储该证书
+                .ForSession 仅为本次会话保存该证书
+                .Permanent  永久存留，OS X上任何App都可以访问存储的证书，iPhone OS上只有相应的App才可以访问
+                .Synchronizable 永久存留，该证书将分发给该AppleID所拥有的设备
 
         - returns: The request.
     */
@@ -119,23 +124,24 @@ public class Request {
         - returns: A dictionary with Authorization key and credential value or empty dictionary if encoding fails.
     */
     public static func authorizationHeader(user user: String, password: String) -> [String: String] {
-        guard let data = "\(user):\(password)".dataUsingEncoding(NSUTF8StringEncoding) else { return [:] }
+        
+        guard let data = "\(user):\(password)".dataUsingEncoding(NSUTF8StringEncoding) else { return [:]
+        }
 
         let credential = data.base64EncodedStringWithOptions([])
 
         return ["Authorization": "Basic \(credential)"]
     }
 
+    
     // MARK: - Progress
 
     /**
-        Sets a closure to be called periodically during the lifecycle of the request as data is written to or read 
-        from the server.
+        Sets a closure to be called periodically during the lifecycle of the request as data is written to or read  from the server.
 
-        - For uploads, the progress closure returns the bytes written, total bytes written, and total bytes expected 
-          to write.
-        - For downloads and data tasks, the progress closure returns the bytes read, total bytes read, and total bytes 
-          expected to read.
+        - For uploads, the progress closure returns the bytes written, total bytes written, and total bytes expected  to write.
+    
+        - For downloads and data tasks, the progress closure returns the bytes read, total bytes read, and total bytes expected to read.
 
         - parameter closure: The code to be executed periodically during the lifecycle of the request.
 
