@@ -29,6 +29,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         super.viewDidLoad()
         let config = NSURLSessionConfiguration.defaultSessionConfiguration()
         self.downloadSession = NSURLSession(configuration: config, delegate: self, delegateQueue: nil)
+        
         self.downloadData = NSUserDefaults.standardUserDefaults().objectForKey(kFileTempData) as? NSData
     }
     
