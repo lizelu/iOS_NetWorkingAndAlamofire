@@ -10,7 +10,7 @@ import UIKit
 
 let kFileTempData = "FileTempData"
 
-class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessionDataDelegate, NSURLSessionStreamDelegate{
+class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDelegate,NSURLSessionDownloadDelegate, NSURLSessionDataDelegate, NSURLSessionStreamDelegate{
     @IBOutlet var logTextView: UITextView!
     
     @IBOutlet var uploadImageView: UIImageView!
@@ -114,20 +114,7 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessi
         
         
         
-        //代理+Cache
-        let fileUrl: NSURL? = NSURL(string: "http://www.baidu.com")
-        let requestFile: NSMutableURLRequest = NSMutableURLRequest(URL: fileUrl!)
-        
-        requestFile.cachePolicy = .ReturnCacheDataElseLoad  //指定缓存策略
-        
-        //使用NSURLSessionDataDelegate处理相应数据
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let sessionWithDelegate = NSURLSession.init(configuration: sessionConfig, delegate: self, delegateQueue: nil)
-        let sessionDataTask = sessionWithDelegate.dataTaskWithRequest(requestFile)
-        
-        sessionDataTask.resume()
     }
-    
     
     
     
@@ -392,6 +379,30 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessi
     
     
     
+    /**
+     使用Delegate来处理网络相关的请求
+     
+     - parameter sender: 
+     */
+    @IBAction func tapSessionDelegateButton(sender: AnyObject) {
+        //代理+Cache
+       // let fileUrl: NSURL? = NSURL(string: "https://www.xinghuo365.com/index.shtml")//不会重定向
+        let fileUrl: NSURL? = NSURL(string: "https://www.xinghuo365.com")               //会重定向
+        let requestFile: NSMutableURLRequest = NSMutableURLRequest(URL: fileUrl!)
+        
+        requestFile.cachePolicy = .ReturnCacheDataElseLoad  //指定缓存策略
+        
+        //使用NSURLSessionDataDelegate处理相应数据
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let sessionWithDelegate = NSURLSession.init(configuration: sessionConfig, delegate: self, delegateQueue: nil)
+        let sessionDataTask = sessionWithDelegate.dataTaskWithRequest(requestFile)
+        
+        sessionDataTask.resume()
+        
+    }
+    
+
+    
 
     
     
@@ -486,11 +497,46 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessi
     
     
     
+
+    
+    
+    
+    //MARK -- NSURLSessionTaskDelegate
+    func URLSession(session: NSURLSession, task: NSURLSessionTask, willPerformHTTPRedirection response: NSHTTPURLResponse, newRequest request: NSURLRequest, completionHandler: (NSURLRequest?) -> Void) {
+        
+    }
+    func URLSession(session: NSURLSession, task: NSURLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
+        
+    }
+    
+    func URLSession(session: NSURLSession, task: NSURLSessionTask, didReceiveChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
+        
+    }
+    
+    func URLSession(session: NSURLSession, task: NSURLSessionTask, needNewBodyStream completionHandler: (NSInputStream?) -> Void) {
+        
+    }
+    
+    //任务执行完毕后会执行下方的请求
+    func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
+        if error != nil {
+            print(error.debugDescription)
+        }
+        print("task\(task.taskIdentifier)执行完毕")
+    }
     
     
     
     // MARK -- NSURLSessionDataDelegate===========================
     
+    /**
+     收到响应时会执行下方的方法
+     
+     - parameter session:
+     - parameter dataTask:
+     - parameter response:          服务器响应
+     - parameter completionHandler: 指定处理响应的策略
+     */
     func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveResponse response: NSURLResponse, completionHandler: (NSURLSessionResponseDisposition) -> Void) {
         showLog("响应头：\(response)")
         
@@ -549,8 +595,26 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessi
     }
     
     
+    /**
+     将要缓存响应时会触发下述方法
+     
+     - parameter session:
+     - parameter dataTask:
+     - parameter proposedResponse:
+     - parameter completionHandler: 
+     */
     func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, willCacheResponse proposedResponse: NSCachedURLResponse, completionHandler: (NSCachedURLResponse?) -> Void) {
-        print(proposedResponse)
+        
+        let data = proposedResponse.data
+        if let str = String.init(data: data, encoding: NSUTF8StringEncoding) {
+            print(str)
+        }
+        
+        print(proposedResponse.storagePolicy)
+        print(proposedResponse.userInfo)
+        print(proposedResponse.response)
+        
+        //对缓存响应进行处理
         completionHandler(proposedResponse)
     }
     
@@ -818,39 +882,24 @@ class ViewController: UIViewController, NSURLSessionDownloadDelegate, NSURLSessi
     }
     
     func showLog(info: AnyObject) {
+        let log = "\(info)"
+        print(log)
         
-        let serial: dispatch_queue_t = dispatch_queue_create("test", DISPATCH_QUEUE_SERIAL)
-        
-        
-        let semaphore: dispatch_semaphore_t = dispatch_semaphore_create(1)
-        
-        dispatch_async(serial) {
-            
-            dispatch_semaphore_wait(semaphore, 0)
-            
-            let log = "\(info)"
-            print(log)
-            
+        dispatch_async(dispatch_get_main_queue()) {
             let logs = self.logTextView.text
             let newlogs = String((logs + "\n"+log)).stringByReplacingOccurrencesOfString("\\n", withString: "\n")
             
-            dispatch_async(dispatch_get_main_queue()) {
-                self.logTextView.text = newlogs
-                
-                let length = newlogs.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)
-                if length > 0 {
-                    let range: NSRange = NSMakeRange(length-1, 1)
-                    self.logTextView.scrollRangeToVisible(range)
-                }
-            }
+
+            self.logTextView.text = newlogs
             
-            dispatch_semaphore_signal(semaphore)
+            let length = newlogs.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)
+            if length > 0 {
+                let range: NSRange = NSMakeRange(length-1, 1)
+                self.logTextView.scrollRangeToVisible(range)
+            }
         }
         
-        
     }
-    
-    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

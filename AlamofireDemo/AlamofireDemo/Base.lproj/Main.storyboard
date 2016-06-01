@@ -301,6 +301,29 @@
                                     <action selector="tapAuthenticationButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="QoU-fP-M1E"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kqm-pN-rgn">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="sf7-NL-8Z7"/>
+                                    <constraint firstAttribute="width" constant="115" id="uZq-6o-LKq"/>
+                                </constraints>
+                                <state key="normal" title="SessionDelegate"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="sf7-NL-8Z7"/>
+                                        <exclude reference="uZq-6o-LKq"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="sf7-NL-8Z7"/>
+                                        <include reference="uZq-6o-LKq"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="tapSessionDelegateButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="P3Q-93-F1s"/>
+                                </connections>
+                            </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="test" translatesAutoresizingMaskIntoConstraints="NO" id="nEe-KI-xQa">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <constraints>
@@ -335,8 +358,10 @@
                             <constraint firstItem="xO9-q8-tpo" firstAttribute="top" secondItem="xZM-XR-iMf" secondAttribute="bottom" constant="19" id="KIX-qB-H38"/>
                             <constraint firstItem="xO9-q8-tpo" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-5" id="KKE-Su-2ar"/>
                             <constraint firstItem="fhq-Io-XNG" firstAttribute="top" secondItem="vun-UR-wQV" secondAttribute="bottom" constant="14" id="KYF-JS-R7E"/>
+                            <constraint firstItem="kqm-pN-rgn" firstAttribute="top" secondItem="fhq-Io-XNG" secondAttribute="bottom" constant="8" id="Of0-uT-PjG"/>
                             <constraint firstItem="vun-UR-wQV" firstAttribute="top" secondItem="mWd-qi-cil" secondAttribute="bottom" constant="7" id="SMk-Gh-iTp"/>
                             <constraint firstItem="xO9-q8-tpo" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="SdM-rT-SEv"/>
+                            <constraint firstItem="kqm-pN-rgn" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="URp-tV-Adi"/>
                             <constraint firstItem="dpl-5r-c0h" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="Vxn-v1-3i9"/>
                             <constraint firstAttribute="trailingMargin" secondItem="nEe-KI-xQa" secondAttribute="trailing" constant="11" id="YgM-0R-81K"/>
                             <constraint firstItem="vun-UR-wQV" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="Ys8-58-mqf"/>
@@ -378,6 +403,7 @@
                                 <exclude reference="xO9-q8-tpo"/>
                                 <exclude reference="RlS-8Q-3aK"/>
                                 <exclude reference="fhq-Io-XNG"/>
+                                <exclude reference="kqm-pN-rgn"/>
                                 <exclude reference="nEe-KI-xQa"/>
                             </mask>
                             <mask key="constraints">
@@ -408,6 +434,8 @@
                                 <exclude reference="KIX-qB-H38"/>
                                 <exclude reference="KKE-Su-2ar"/>
                                 <exclude reference="SdM-rT-SEv"/>
+                                <exclude reference="Of0-uT-PjG"/>
+                                <exclude reference="URp-tV-Adi"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -424,6 +452,7 @@
                                 <include reference="xO9-q8-tpo"/>
                                 <include reference="RlS-8Q-3aK"/>
                                 <include reference="fhq-Io-XNG"/>
+                                <include reference="kqm-pN-rgn"/>
                                 <exclude reference="nEe-KI-xQa"/>
                             </mask>
                             <mask key="constraints">
@@ -454,6 +483,8 @@
                                 <include reference="KIX-qB-H38"/>
                                 <include reference="KKE-Su-2ar"/>
                                 <include reference="SdM-rT-SEv"/>
+                                <include reference="Of0-uT-PjG"/>
+                                <include reference="URp-tV-Adi"/>
                             </mask>
                         </variation>
                     </view>
