@@ -502,7 +502,29 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     
     
     //MARK -- NSURLSessionTaskDelegate
+    /**
+     请求被重定向后会执行下方的方法
+     
+     - parameter session:
+     - parameter task:
+     - parameter response:
+     - parameter request:   被重定向后的request
+     - parameter completionHandler:
+     */
     func URLSession(session: NSURLSession, task: NSURLSessionTask, willPerformHTTPRedirection response: NSHTTPURLResponse, newRequest request: NSURLRequest, completionHandler: (NSURLRequest?) -> Void) {
+        
+        print(response)
+        print(request.URL)              //Optional(https://www.xinghuo365.com/index.shtml)
+        print(request.cachePolicy)
+        
+        
+        //可以对重定向后request中的URL进行修改
+        if let mutableURLRequest: NSMutableURLRequest = request.mutableCopy() as? NSMutableURLRequest {
+            mutableURLRequest.URL = NSURL(string: "http://www.baidu.com")        //会再次重定向到百度
+            completionHandler(mutableURLRequest)
+        }
+        
+        //completionHandler(request)
         
     }
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
@@ -540,6 +562,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveResponse response: NSURLResponse, completionHandler: (NSURLSessionResponseDisposition) -> Void) {
         showLog("响应头：\(response)")
         
+        
         /**
          *  .Cancel 取消加载，默认为 .Cancel
          *  .Allow 允许继续操作, 会执行 dataTaskDidReceiveData回调方法
@@ -548,8 +571,11 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
          */
         
 //        completionHandler(.Cancel)
+        
         completionHandler(.Allow)
+        
 //        completionHandler(.BecomeDownload)
+        
 //        if #available(iOS 9.0, *) {
 //            completionHandler(.BecomeStream)
 //        } else {
@@ -568,6 +594,8 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
      - parameter data:     接收的数据
      */
     func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveData data: NSData) {
+        
+        print(data)
         
         if let str = String.init(data: data, encoding: NSUTF8StringEncoding) {
             showLog(str)
