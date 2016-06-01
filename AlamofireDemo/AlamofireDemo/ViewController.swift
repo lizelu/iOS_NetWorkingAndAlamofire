@@ -142,25 +142,25 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
      - parameter sender:
      */
     @IBAction func tapSessionUploadFileButton(sender: AnyObject) {
+        self.downloadProgressView.progress = 0
          showLog("正在上传数据")
+        let path = NSBundle.mainBundle().pathForResource("uploadImage", ofType: "png")
+        var imageData : NSData?
         
-        //从网络获取图片
-        let fileUrl = NSURL.init(string: "http://img.taopic.com/uploads/allimg/140326/235113-1403260I33562.jpg")
-        var fileData: NSData? = nil
         
         let dispatchGroup = dispatch_group_create()
         dispatch_group_async(dispatchGroup, dispatch_get_global_queue(0, 0)) {
-            fileData = NSData.init(contentsOfURL: fileUrl!)
+            imageData = NSData.init(contentsOfFile: path!)
         }
     
         dispatch_group_notify(dispatchGroup, dispatch_get_global_queue(0, 0)) {
             //更新主线程
             dispatch_async(dispatch_get_main_queue(), {
-                self.uploadImageView.image = UIImage.init(data: fileData!)
+                self.uploadImageView.image = UIImage.init(data: imageData!)
             })
             
             //将fileData上传到服务器
-            self.uploadTask(fileData!)
+            self.uploadTask(imageData!)
         }
     }
     
@@ -170,13 +170,17 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
      - parameter parameters: 上传到服务器的二进制文件
      */
     func uploadTask(parameters:NSData) {
+        
+        
+        
         let uploadUrlString = "http://127.0.0.1/upload.php"
         let url: NSURL = NSURL.init(string: uploadUrlString)!
         
         let request = NSMutableURLRequest.init(URL: url)
         request.HTTPMethod = "POST"
         
-        let session: NSURLSession = NSURLSession.sharedSession()
+        let session: NSURLSession = NSURLSession.init(configuration: NSURLSessionConfiguration.defaultSessionConfiguration(), delegate: self, delegateQueue: nil)
+        
         let uploadTask: NSURLSessionUploadTask = session.uploadTaskWithRequest(request, fromData: parameters) {
             (data:NSData?, response:NSURLResponse?, error:NSError?) -> Void in
             if error != nil{
@@ -188,6 +192,8 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         }
         //使用resume方法启动任务
         uploadTask.resume()
+        
+        //会执行NSURLSessionTaskDelegate中的didSendBodyData回调方法监听上传进度
     }
 
     
@@ -399,18 +405,12 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         
         sessionDataTask.resume()
         
+        
     }
     
+    
+    
 
-    
-
-    
-    
-    
-    
-    
-    
-    
     //MARK - NSURLSessionDelegate-----------------
     
     
@@ -433,8 +433,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     */
     
     
-    
-    
+
     /**
      请求HTTPS数据时就会调用下方的代理方法
      
@@ -447,13 +446,9 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         let authenticationMethod = challenge.protectionSpace.authenticationMethod
         showLog(authenticationMethod)
         
-    
-        
-        
         //判断认证方式是否为服务器信任
         if authenticationMethod == NSURLAuthenticationMethodServerTrust {
             showLog("服务器信任证书")
-            
             
             //处理策略
             let disposition = NSURLSessionAuthChallengeDisposition.UseCredential
@@ -501,7 +496,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     
     
     
-    //MARK -- NSURLSessionTaskDelegate
+    //MARK ------------- NSURLSessionTaskDelegate------------------------------
     /**
      请求被重定向后会执行下方的方法
      
@@ -527,12 +522,43 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         //completionHandler(request)
         
     }
+    
+    /**
+     向服务器发送数据所调用的方法，可以监听文件上传进度
+     
+     - parameter session:
+     - parameter task:
+     - parameter bytesSent:                 本次上传
+     - parameter totalBytesSent:            已上传
+     - parameter totalBytesExpectedToSend:  文件总大小
+     */
+    //taskDidSendBodyDataBytesSentTotalBytesSendTotalBytesExpectedToSend
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
+        showLog("\n本次上传：\(bytesSent)B")
+        showLog("已上传：\(totalBytesSent)B")
+        showLog("文件总量：\(totalBytesExpectedToSend)B")
         
+        //获取进度
+        let written:Float = (Float)(totalBytesSent)
+        let total:Float = (Float)(totalBytesExpectedToSend)
+        dispatch_async(dispatch_get_main_queue()) {
+            self.downloadProgressView.progress = written/total
+        }
+
     }
     
+    /**
+     与NSURLSessionDelegate中的下方的回调方法一直，在请求https时会执行下方的方法，因为上方已经实现了
+     NSURLSessionDelegate中相应的方法，所以下方的回调方法在请求https时不会执行。如果将上面NSURLSessionDelegate
+     的相应的方法进行注释掉，将方法体放入到下方的回调方法中，一样可以进行证书认证
+     
+     - parameter session:
+     - parameter task:
+     - parameter challenge:
+     - parameter completionHandler:
+     */
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didReceiveChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
-        
+        //处理认证想代码，参见上述NSURLSessionDelegate中的对应的方法
     }
     
     func URLSession(session: NSURLSession, task: NSURLSessionTask, needNewBodyStream completionHandler: (NSInputStream?) -> Void) {
@@ -546,6 +572,9 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         }
         print("task\(task.taskIdentifier)执行完毕")
     }
+    
+    
+    
     
     
     
