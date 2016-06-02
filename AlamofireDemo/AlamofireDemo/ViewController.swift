@@ -9,28 +9,24 @@
 import UIKit
 
 let kFileTempData = "FileTempData"
+let keyBackgroundDownload = "backgroundDownload"
 
 class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDelegate,NSURLSessionDownloadDelegate, NSURLSessionDataDelegate, NSURLSessionStreamDelegate{
     @IBOutlet var logTextView: UITextView!
     
     @IBOutlet var uploadImageView: UIImageView!
     
-    @IBOutlet var downloadImageView: UIImageView!
-    
     @IBOutlet var downloadProgressView: UIProgressView!
     
     var downloadTask: NSURLSessionDownloadTask? = nil
     var downloadSession: NSURLSession? = nil
-    var downloadData: NSData? = nil
     
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let config = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier(keyBackgroundDownload)
         self.downloadSession = NSURLSession(configuration: config, delegate: self, delegateQueue: nil)
-        
-        self.downloadData = NSUserDefaults.standardUserDefaults().objectForKey(kFileTempData) as? NSData
     }
     
     
@@ -110,11 +106,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         });
         
         sessionTask.resume()
-        
-        
-        
-        
-        
+    
     }
     
     
@@ -145,7 +137,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     @IBAction func tapSessionUploadFileButton(sender: AnyObject) {
         self.downloadProgressView.progress = 0
          showLog("正在上传数据")
-        let path = NSBundle.mainBundle().pathForResource("uploadImage", ofType: "png")
+        let path = NSBundle.mainBundle().pathForResource("test", ofType: "png")
         var imageData : NSData?
         
         
@@ -214,13 +206,20 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     
     @IBAction func tapDownloadTaskButton(sender: AnyObject) {
          showLog("正在下载图片")
+        
+        
+        let haveDownloadData: NSData? =  NSUserDefaults.standardUserDefaults().objectForKey(kFileTempData) as? NSData
+        
+        
         //从网络下载图片
-        let fileUrl: NSURL? = NSURL(string: "http://img3.91.com/uploads/allimg/140108/32-14010QK546.jpg")
+        //let fileUrl: NSURL? = NSURL(string: "http://data.vod.itc.cn/?rb=1&prot=1&key=jbZhEJhlqlUN-Wj_HEI8BjaVqKNFvDrn&prod=flash&pt=1&new=/107/94/cs1SqPgtR2u0jueLoUh3CA.mp4")
+        let fileUrl: NSURL? = NSURL(string: "http://d.3987.com/yej_141216/009.jpg")
+
         let request: NSURLRequest = NSURLRequest(URL: fileUrl!)
 
         
-        if (self.downloadData != nil) {
-            self.downloadTask = self.downloadSession?.downloadTaskWithResumeData(self.downloadData!)
+        if (haveDownloadData != nil) {
+            self.downloadTask = self.downloadSession?.downloadTaskWithResumeData(haveDownloadData!)
         }else{
              self.downloadTask = self.downloadSession?.downloadTaskWithRequest(request)
         }
@@ -236,12 +235,27 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
      - parameter sender:
      */
     @IBAction func tapPauseButton(sender: AnyObject) {
+        
+        print(NSTemporaryDirectory())
         showLog("暂停下载任务")
-        downloadTask?.cancelByProducingResumeData({ (data) in
-            if data != nil {
-                NSUserDefaults.standardUserDefaults().setObject(data, forKey: kFileTempData)
-                self.downloadData = data
-                self.showLog((data?.length)!)
+        
+        downloadTask?.cancelByProducingResumeData({ (resumeData) in
+            
+            
+            if resumeData != nil {
+                /**
+                 *  此处的resumeData并不是已经下载的文件的Data而是存储下载信息的Data
+                 *  将该Data进行解析，是一个xml格式的数据，其中存储着下载链接以及上次下载数据
+                 */
+                if let str = String.init(data: resumeData!, encoding: NSUTF8StringEncoding) {
+                    print(str)
+                }
+                
+                
+                NSUserDefaults.standardUserDefaults().setObject(resumeData, forKey: kFileTempData)
+                
+                //resumeData每次输出的大小没有多少区别
+                self.showLog("resumeData的长度\((resumeData?.length)!)")
             }
         })
     }
@@ -342,7 +356,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         
         let memoryCapacity = 4 * 1024 * 1024    //内存容量
         let diskCapacity = 10 * 1024 * 1024     //磁盘容量
-        let cacheFilePath: String = "MyCache/"   //缓存路径
+        let cacheFilePath: String = "/MyCache"   //缓存路径-相对路径，位于~/Library/Caches
 
         let urlCache: NSURLCache = NSURLCache(memoryCapacity: memoryCapacity, diskCapacity: diskCapacity, diskPath: cacheFilePath)
         
@@ -414,6 +428,17 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
 
     //MARK - NSURLSessionDelegate-----------------
     
+    
+    func URLSession(session: NSURLSession, didBecomeInvalidWithError error: NSError?) {
+        print("Session已无效")
+    }
+    
+    func URLSessionDidFinishEventsForBackgroundURLSession(session: NSURLSession) {
+        print("后台事件已处理完毕")
+        dispatch_async(dispatch_get_main_queue()) { 
+            self.downloadProgressView.progress = 1
+        }
+    }
     
     /**
      认证方式
@@ -569,7 +594,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     //任务执行完毕后会执行下方的请求
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
         if error != nil {
-            print(error.debugDescription)
+            print(error?.userInfo["NSErrorFailingURLStringKey"])
         }
         print("task\(task.taskIdentifier)执行完毕")
     }
@@ -578,7 +603,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     
     
     
-    
+
     // MARK -- NSURLSessionDataDelegate===========================
     
     /**
@@ -697,10 +722,8 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
      */
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
         
-        print(downloadTask)
         
         NSUserDefaults.standardUserDefaults().removeObjectForKey(kFileTempData)
-        self.downloadData = nil
         
         showLog("下载的临时文件路径:\(location)")                //输出下载文件临时目录
         
@@ -712,7 +735,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         let newFileName = String(UInt(NSDate().timeIntervalSince1970))
         var newFileExtensionName = "txt"
         
-        if downloadTask == self.downloadTask {
+        if session.configuration.identifier == keyBackgroundDownload {
             newFileExtensionName = "png"
         }
         
@@ -764,11 +787,16 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
      
      - parameter session:
      - parameter downloadTask:
-     - parameter fileOffset:
-     - parameter expectedTotalBytes:
+     - parameter fileOffset:            已下载多少
+     - parameter expectedTotalBytes:    文件大小
      */
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didResumeAtOffset fileOffset: Int64, expectedTotalBytes: Int64) {
+        print("已经下载：\(fileOffset)")
+        print("文件总量：\(expectedTotalBytes)")
         
+        dispatch_async(dispatch_get_main_queue()) {
+            self.downloadProgressView.progress = Float(fileOffset/expectedTotalBytes)
+        }
     }
 
     
@@ -936,6 +964,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     
     
     @IBAction func tapClearLogButton(sender: AnyObject) {
+        NSUserDefaults.standardUserDefaults().removeObjectForKey(kFileTempData)
         self.logTextView.text = ""
     }
     

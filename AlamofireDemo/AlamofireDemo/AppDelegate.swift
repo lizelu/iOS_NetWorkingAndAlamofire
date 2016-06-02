@@ -40,6 +40,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
+    
+    
+    /**
+     后台下载任务完成后会执行下方回调
+     
+     - parameter application:       =
+     - parameter identifier:        SessionConfiguration的Identifier
+     - parameter completionHandler: 对事件进行处理，就会执行NSURLSessionDownloadDelegate相应的代理方法
+     */
+    func application(application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: () -> Void) {
+        print(identifier)
+        completionHandler()
+    }
 
 
 }

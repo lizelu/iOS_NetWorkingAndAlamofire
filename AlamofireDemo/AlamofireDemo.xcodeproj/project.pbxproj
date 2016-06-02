@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F410398B1CEC09B30015D15D /* test.png in Resources */ = {isa = PBXBuildFile; fileRef = F410398A1CEC09B30015D15D /* test.png */; };
 		F45409CD1CED6D7B00F190C0 /* AlamofireViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F45409CC1CED6D7B00F190C0 /* AlamofireViewController.swift */; };
-		F46479701CFECDAD00F3774D /* uploadImage.png in Resources */ = {isa = PBXBuildFile; fileRef = F464796F1CFECDAD00F3774D /* uploadImage.png */; };
 		F4AC3B131CE96D0000F65285 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4AC3B121CE96D0000F65285 /* AppDelegate.swift */; };
 		F4AC3B151CE96D0000F65285 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4AC3B141CE96D0000F65285 /* ViewController.swift */; };
 		F4AC3B181CE96D0000F65285 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4AC3B161CE96D0000F65285 /* Main.storyboard */; };
@@ -17,6 +15,8 @@
 		F4AC3B1D1CE96D0000F65285 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4AC3B1B1CE96D0000F65285 /* LaunchScreen.storyboard */; };
 		F4AC3B3C1CE96D3A00F65285 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4AC3B2F1CE96D1A00F65285 /* Alamofire.framework */; };
 		F4AC3B3D1CE96D3A00F65285 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F4AC3B2F1CE96D1A00F65285 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F4D139361CFFDDC1009B7653 /* test.png in Resources */ = {isa = PBXBuildFile; fileRef = F4D139351CFFDDC1009B7653 /* test.png */; };
+		F4D1393A1CFFDE70009B7653 /* upload_image.png in Resources */ = {isa = PBXBuildFile; fileRef = F4D139391CFFDE70009B7653 /* upload_image.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,9 +93,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		F410398A1CEC09B30015D15D /* test.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = test.png; path = ../../../../../Desktop/test.png; sourceTree = "<group>"; };
 		F45409CC1CED6D7B00F190C0 /* AlamofireViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireViewController.swift; sourceTree = "<group>"; };
-		F464796F1CFECDAD00F3774D /* uploadImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = uploadImage.png; sourceTree = "<group>"; };
 		F4AC3B0F1CE96D0000F65285 /* AlamofireDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlamofireDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4AC3B121CE96D0000F65285 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F4AC3B141CE96D0000F65285 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -104,6 +102,8 @@
 		F4AC3B1C1CE96D0000F65285 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F4AC3B1E1CE96D0000F65285 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F4AC3B241CE96D1A00F65285 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = ../../Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
+		F4D139351CFFDDC1009B7653 /* test.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = test.png; path = ../test.png; sourceTree = "<group>"; };
+		F4D139391CFFDE70009B7653 /* upload_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upload_image.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,14 +137,14 @@
 		F4AC3B111CE96D0000F65285 /* AlamofireDemo */ = {
 			isa = PBXGroup;
 			children = (
+				F4D139391CFFDE70009B7653 /* upload_image.png */,
 				F4AC3B241CE96D1A00F65285 /* Alamofire.xcodeproj */,
 				F4AC3B121CE96D0000F65285 /* AppDelegate.swift */,
 				F4AC3B141CE96D0000F65285 /* ViewController.swift */,
 				F45409CC1CED6D7B00F190C0 /* AlamofireViewController.swift */,
 				F4AC3B161CE96D0000F65285 /* Main.storyboard */,
 				F4AC3B191CE96D0000F65285 /* Assets.xcassets */,
-				F464796F1CFECDAD00F3774D /* uploadImage.png */,
-				F410398A1CEC09B30015D15D /* test.png */,
+				F4D139351CFFDDC1009B7653 /* test.png */,
 				F4AC3B1B1CE96D0000F65285 /* LaunchScreen.storyboard */,
 				F4AC3B1E1CE96D0000F65285 /* Info.plist */,
 			);
@@ -284,10 +284,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4AC3B1D1CE96D0000F65285 /* LaunchScreen.storyboard in Resources */,
+				F4D139361CFFDDC1009B7653 /* test.png in Resources */,
 				F4AC3B1A1CE96D0000F65285 /* Assets.xcassets in Resources */,
 				F4AC3B181CE96D0000F65285 /* Main.storyboard in Resources */,
-				F46479701CFECDAD00F3774D /* uploadImage.png in Resources */,
-				F410398B1CEC09B30015D15D /* test.png in Resources */,
+				F4D1393A1CFFDE70009B7653 /* upload_image.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
