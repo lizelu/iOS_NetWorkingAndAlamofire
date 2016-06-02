@@ -373,6 +373,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         //let url = NSURL.init(string: "https://kyfw.12306.cn/otn/regist/init")
         
         let request = NSMutableURLRequest.init(URL: url!)
+        request.cachePolicy = .ReturnCacheDataElseLoad
         
         let session = NSURLSession.init(configuration: NSURLSessionConfiguration.defaultSessionConfiguration(), delegate: self, delegateQueue: NSOperationQueue.mainQueue())
         
@@ -957,6 +958,9 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     @IBAction func tapClearLogButton(sender: AnyObject) {
         NSUserDefaults.standardUserDefaults().removeObjectForKey(kFileResumeData)
         self.logTextView.text = ""
+
+        let cachPath = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
+        print(cachPath)
     }
     
     func showLog(info: AnyObject) {
