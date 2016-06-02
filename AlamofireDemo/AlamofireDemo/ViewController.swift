@@ -167,7 +167,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
      - parameter parameters: 上传到服务器的二进制文件
      */
     func uploadTask(parameters:NSData) {
-        
+        //let uploadUrlString = "https://httpbin.org/post"
         let uploadUrlString = "http://127.0.0.1/upload.php"
         let url: NSURL = NSURL.init(string: uploadUrlString)!
         
@@ -279,7 +279,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         let session: NSURLSession = NSURLSession.sharedSession()
         let dataTask: NSURLSessionDataTask = session.dataTaskWithRequest(request) { (data, response, error) in
             if data != nil {
-                self.showLog(String.init(data: data!, encoding: NSUTF8StringEncoding)!)
+                self.showLog("缓存数据长度 = \((data?.length)!)")
             }
         }
         dataTask.resume()
@@ -300,7 +300,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         
         let dataTask: NSURLSessionDataTask = session.dataTaskWithRequest(request) { (data, response, error) in
             if data != nil {
-                self.showLog(String.init(data: data!, encoding: NSUTF8StringEncoding)!)
+                self.showLog("缓存数据长度 = \((data?.length)!)")
             }
         }
         dataTask.resume()
@@ -328,7 +328,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
 
         let dataTask: NSURLSessionDataTask = session.dataTaskWithRequest(request) { (data, response, error) in
             if data != nil {
-                self.showLog(String.init(data: data!, encoding: NSUTF8StringEncoding)!)
+                self.showLog("缓存数据长度 = \((data?.length)!)")
             }
         }
         dataTask.resume()
@@ -358,7 +358,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         
         let dataTask: NSURLSessionDataTask = session.dataTaskWithRequest(request) { (data, response, error) in
             if data != nil {
-                self.showLog(String.init(data: data!, encoding: NSUTF8StringEncoding)!)
+                self.showLog("缓存数据长度 = \((data?.length)!)")
             }
         }
         
@@ -378,8 +378,10 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         
         let sessionDataTask = session.dataTaskWithRequest(request) { (data, response, error) in
             if data != nil {
-                let str = String.init(data: data!, encoding: NSUTF8StringEncoding)
-                self.showLog(str!)
+//                let str = String.init(data: data!, encoding: NSUTF8StringEncoding)
+//                self.showLog(str!)
+                
+                self.showLog("缓存数据长度 = \((data?.length)!)")
             }
         }
         
@@ -529,12 +531,12 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         
         
         //可以对重定向后request中的URL进行修改
-        if let mutableURLRequest: NSMutableURLRequest = request.mutableCopy() as? NSMutableURLRequest {
-            mutableURLRequest.URL = NSURL(string: "http://www.baidu.com")        //会再次重定向到百度
-            completionHandler(mutableURLRequest)
-        }
+//        if let mutableURLRequest: NSMutableURLRequest = request.mutableCopy() as? NSMutableURLRequest {
+//            mutableURLRequest.URL = NSURL(string: "http://www.baidu.com")        //会再次重定向到百度
+//            completionHandler(mutableURLRequest)
+//        }
         
-        //completionHandler(request)
+        completionHandler(request)
         
     }
     
@@ -583,7 +585,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     //任务执行完毕后会执行下方的请求
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
         if error != nil {
-            print(error?.userInfo["NSErrorFailingURLStringKey"])
+            print(error?.userInfo)
         }
         print("task\(task.taskIdentifier)执行完毕")
     }
@@ -961,24 +963,27 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         let log = "\(info)"
         print(log)
         
+        let semaphore: dispatch_semaphore_t = dispatch_semaphore_create(1)
         dispatch_async(dispatch_get_main_queue()) {
+            
+            dispatch_semaphore_wait(semaphore, 0)
             let logs = self.logTextView.text
             let newlogs = String((logs + "\n"+log)).stringByReplacingOccurrencesOfString("\\n", withString: "\n")
             
 
             self.logTextView.text = newlogs
             
-            let length = newlogs.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)
-            if length > 0 {
-                let range: NSRange = NSMakeRange(length-1, 1)
-                self.logTextView.scrollRangeToVisible(range)
-            }
+            self.logTextView.layoutManager.allowsNonContiguousLayout = false
+            self.logTextView.scrollRectToVisible(CGRectMake(0, self.logTextView.contentSize.height - 15, self.logTextView.contentSize.width, 10), animated: true)
+            
+            dispatch_semaphore_signal(semaphore)
         }
         
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+        print("aaaa")
         // Dispose of any resources that can be recreated.
     }
 
