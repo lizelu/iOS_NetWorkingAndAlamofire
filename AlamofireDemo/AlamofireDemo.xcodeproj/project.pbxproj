@@ -16,7 +16,6 @@
 		F4AC3B3C1CE96D3A00F65285 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4AC3B2F1CE96D1A00F65285 /* Alamofire.framework */; };
 		F4AC3B3D1CE96D3A00F65285 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F4AC3B2F1CE96D1A00F65285 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F4D139361CFFDDC1009B7653 /* test.png in Resources */ = {isa = PBXBuildFile; fileRef = F4D139351CFFDDC1009B7653 /* test.png */; };
-		F4D1393A1CFFDE70009B7653 /* upload_image.png in Resources */ = {isa = PBXBuildFile; fileRef = F4D139391CFFDE70009B7653 /* upload_image.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,7 +102,6 @@
 		F4AC3B1E1CE96D0000F65285 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F4AC3B241CE96D1A00F65285 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = ../../Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
 		F4D139351CFFDDC1009B7653 /* test.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = test.png; path = ../test.png; sourceTree = "<group>"; };
-		F4D139391CFFDE70009B7653 /* upload_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upload_image.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,7 +135,6 @@
 		F4AC3B111CE96D0000F65285 /* AlamofireDemo */ = {
 			isa = PBXGroup;
 			children = (
-				F4D139391CFFDE70009B7653 /* upload_image.png */,
 				F4AC3B241CE96D1A00F65285 /* Alamofire.xcodeproj */,
 				F4AC3B121CE96D0000F65285 /* AppDelegate.swift */,
 				F4AC3B141CE96D0000F65285 /* ViewController.swift */,
@@ -287,7 +284,6 @@
 				F4D139361CFFDDC1009B7653 /* test.png in Resources */,
 				F4AC3B1A1CE96D0000F65285 /* Assets.xcassets in Resources */,
 				F4AC3B181CE96D0000F65285 /* Main.storyboard in Resources */,
-				F4D1393A1CFFDE70009B7653 /* upload_image.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
