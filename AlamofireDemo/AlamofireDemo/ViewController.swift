@@ -8,8 +8,8 @@
 
 import UIKit
 
-let kFileResumeData = "ResumeData"
-let keyBackgroundDownload = "backgroundDownload"
+let kFileResumeData = "ResumeData"                  // 存储resumeData的Key
+let keyBackgroundDownload = "backgroundDownload"    //BackgroundSession的标示
 
 class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDelegate,NSURLSessionDownloadDelegate, NSURLSessionDataDelegate, NSURLSessionStreamDelegate{
     
@@ -28,6 +28,11 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         //创建BackgroundDownloadSession
         let config = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier(keyBackgroundDownload)
         self.downloadSession = NSURLSession(configuration: config, delegate: self, delegateQueue: nil)
+        
+//        let defaultSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
+//        let ephemeralSessionConfiguration = NSURLSessionConfiguration.ephemeralSessionConfiguration()
+//        let backgroundSessionConfiguration = NSURLSessionConfiguration.backgroundSessionConfiguration("标示")
+//        let testSession = NSURLSession(configuration: defaultSessionConfiguration)
     }
     
     
@@ -61,53 +66,39 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     
     /**
      NSURLSessionDataTask
-     
-     - parameter method:     NSURLSessionDataTask
+     - parameter method:     请求方式：POST或者GET
      - parameter parameters: 字典形式的参数
      */
     
     func sessionDataTaskRequest(method: String, parameters:[String:AnyObject]){
-        
+        //1.创建会话用的URL
         var hostString = "http://jsonplaceholder.typicode.com/posts"
-
         let escapeQueryString = query(parameters)   //对参数进行URL编码
-        /**
-         *  Get方式就将参数拼接到url上
-         */
         if method == "GET" {
             hostString += "?" + escapeQueryString
         }
-        
         let url: NSURL = NSURL.init(string: hostString)!
+        
+        //2.创建Request
         let request: NSMutableURLRequest = NSMutableURLRequest.init(URL: url)
         request.HTTPMethod = method //指定请求方式
-        
-        
-        /**
-         *  POST方法就将参数放到HTTPBody中
-         */
         if method == "POST" {
             request.HTTPBody = escapeQueryString.dataUsingEncoding(NSUTF8StringEncoding)
         }
         
-        
-        //使用Block进行解析，因没有指定delegate，这种方式当然不会执行SessionDelegate相应的方法
+        //3.获取Session单例，创建SessionDataTask
         let session: NSURLSession = NSURLSession.sharedSession()
-        
-        //创建SessionDataTask
         let sessionTask: NSURLSessionDataTask = session.dataTaskWithRequest(request, completionHandler: { (data, response, error) in
             if error != nil {
                 self.showLog(error!)
                 return
             }
             
-            //对Data进行Json解析
-            if data != nil {
+            if data != nil {    //对Data进行Json解析
                 let json = try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments)
                 self.showLog(json!)
             }
         });
-        
         sessionTask.resume()
     }
     
@@ -166,7 +157,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
      
      - parameter parameters: 上传到服务器的二进制文件
      */
-    func uploadTask(parameters:NSData) {
+    func uploadTask(parameters: NSData) {
         //let uploadUrlString = "https://httpbin.org/post"
         let uploadUrlString = "http://127.0.0.1/upload.php"
         let url: NSURL = NSURL.init(string: uploadUrlString)!
@@ -318,7 +309,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         
         let memoryCapacity = 4 * 1024 * 1024    //内存容量
         let diskCapacity = 10 * 1024 * 1024     //磁盘容量
-        let cacheFilePath: String = "MyCache/"   //缓存路径
+        let cacheFilePath: String = "MyCache"   //缓存路径
         
         let urlCache: NSURLCache = NSURLCache(memoryCapacity: memoryCapacity, diskCapacity: diskCapacity, diskPath: cacheFilePath)
         NSURLCache.setSharedURLCache(urlCache)
@@ -340,12 +331,12 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         
         showLog("使用URLCache + NSURLSessionConfiguration进行缓存")
         
-        let fileUrl: NSURL? = NSURL(string: "http://www.baidu.com")
+        let fileUrl: NSURL? = NSURL(string: "http://www.cnblogs.com")
         let request: NSMutableURLRequest = NSMutableURLRequest(URL: fileUrl!)
         
         let memoryCapacity = 4 * 1024 * 1024    //内存容量
         let diskCapacity = 10 * 1024 * 1024     //磁盘容量
-        let cacheFilePath: String = "/MyCache"   //缓存路径-相对路径，位于~/Library/Caches
+        let cacheFilePath: String = "MyCache"   //缓存路径-相对路径，位于~/Library/Caches
 
         let urlCache: NSURLCache = NSURLCache(memoryCapacity: memoryCapacity, diskCapacity: diskCapacity, diskPath: cacheFilePath)
         
@@ -856,13 +847,12 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     
     
     
-    // - MARK - Alamofire中的三个方法该方法将字典转换成json串
+    // - MARK - Alamofire中的三个方法该方法将字典转换成URL编码的字符
     func query(parameters: [String: AnyObject]) -> String {
         
         var components: [(String, String)] = []     //存有元组的数组，元组由ULR中的(key, value)组成
         
-        //遍历参数字典
-        for key in parameters.keys.sort(<) {
+        for key in parameters.keys.sort(<) {        //遍历参数字典
             let value = parameters[key]!
             components += queryComponents(key, value)
         }
@@ -879,12 +869,16 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
             for (nestedKey, value) in dictionary {
                 components += queryComponents("\(key)[\(nestedKey)]", value)
             }
-        } else if let array = value as? [AnyObject] {               //value为数组的情况, 递归调用
+        }
+            
+        else if let array = value as? [AnyObject] {               //value为数组的情况, 递归调用
             for value in array {
                 components += queryComponents("\(key)[]", value)
             }
-        } else {
-            components.append((escape(key), escape("\(value)")))    //vlalue为字符串的情况，进行转义，上面两种情况最终会递归到此情况而结束
+        }
+        
+        else {  //vlalue为字符串的情况，进行转义，上面两种情况最终会递归到此情况而结束
+            components.append((escape(key), escape("\(value)")))
         }
         
         return components
@@ -948,20 +942,49 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     
     
     
-    
-    
+
 
     
-    
-    
-    
+    //清除日志以及缓存
     @IBAction func tapClearLogButton(sender: AnyObject) {
         NSUserDefaults.standardUserDefaults().removeObjectForKey(kFileResumeData)
         self.logTextView.text = ""
-
-        let cachPath = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
-        print(cachPath)
+        clearCacheFile()
     }
+    
+    /**
+     清理缓存文件
+     */
+    func clearCacheFile() {
+        //获取缓存文件路径
+        let cachePath = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)[0]
+        
+        //获取BoundleID
+        guard let bundleIdentifier = NSBundle.mainBundle().bundleIdentifier else {
+            return
+        }
+        
+        //拼接当前工程所创建的缓存文件路径
+        let projectCashPath = "\(cachePath)/\(bundleIdentifier)/"
+        
+        //创建FileManager
+        let fileManager: NSFileManager = NSFileManager.defaultManager()
+        
+        //获取缓存文件列表
+        guard let cacheFileList = try?fileManager.contentsOfDirectoryAtPath(projectCashPath) else {
+            return
+        }
+        
+        //遍历文件列表，移除所有缓存文件
+        for fileName in cacheFileList {
+            let willRemoveFilePath = projectCashPath + fileName
+            
+            if fileManager.fileExistsAtPath(willRemoveFilePath) {
+                try!fileManager.removeItemAtPath(willRemoveFilePath)
+            }
+        }
+    }
+    
     
     func showLog(info: AnyObject) {
         let log = "\(info)"
@@ -987,7 +1010,6 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        print("aaaa")
         // Dispose of any resources that can be recreated.
     }
 
