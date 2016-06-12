@@ -92,6 +92,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F402B2BA1D0D02BF0017FD60 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = Base; path = Base.lproj/Alamofire.playground; sourceTree = "<group>"; };
 		F45409CC1CED6D7B00F190C0 /* AlamofireViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireViewController.swift; sourceTree = "<group>"; };
 		F4AC3B0F1CE96D0000F65285 /* AlamofireDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlamofireDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4AC3B121CE96D0000F65285 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -144,6 +145,7 @@
 				F4D139351CFFDDC1009B7653 /* test.png */,
 				F4AC3B1B1CE96D0000F65285 /* LaunchScreen.storyboard */,
 				F4AC3B1E1CE96D0000F65285 /* Info.plist */,
+				F402B2B91D0D02BF0017FD60 /* Alamofire.playground */,
 			);
 			path = AlamofireDemo;
 			sourceTree = "<group>";
@@ -311,6 +313,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		F402B2B91D0D02BF0017FD60 /* Alamofire.playground */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F402B2BA1D0D02BF0017FD60 /* Base */,
+			);
+			name = Alamofire.playground;
+			sourceTree = "<group>";
+		};
 		F4AC3B161CE96D0000F65285 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

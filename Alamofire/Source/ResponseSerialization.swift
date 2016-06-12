@@ -275,6 +275,10 @@ extension Request {
         options options: NSJSONReadingOptions = .AllowFragments)
         -> ResponseSerializer<AnyObject, NSError>
     {
+        
+        /**
+         *  实例化 ResponseSerializer 对象，参数serializeResponse就是后边的闭包
+         */
         return ResponseSerializer { _, response, data, error in
             guard error == nil else { return .Failure(error!) }
 

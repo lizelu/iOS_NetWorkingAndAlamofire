@@ -428,7 +428,7 @@ public class Request {
                 if let dataStream = dataStream {
                     dataStream(data: data)
                 } else {
-                    mutableData.appendData(data)
+                    mutableData.appendData(data)    //存储每次传过来的值
                 }
 
                 totalBytesReceived += data.length
@@ -437,6 +437,7 @@ public class Request {
                 progress.totalUnitCount = totalBytesExpected
                 progress.completedUnitCount = totalBytesReceived
 
+                //数据加载进度
                 dataProgress?(
                     bytesReceived: Int64(data.length),
                     totalBytesReceived: totalBytesReceived,
@@ -451,6 +452,7 @@ public class Request {
             willCacheResponse proposedResponse: NSCachedURLResponse,
             completionHandler: ((NSCachedURLResponse?) -> Void))
         {
+            print(proposedResponse)
             var cachedResponse: NSCachedURLResponse? = proposedResponse
 
             if let dataTaskWillCacheResponse = dataTaskWillCacheResponse {

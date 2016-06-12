@@ -37,7 +37,7 @@ public class Manager {
         A shared instance of `Manager`, used by top-level Alamofire request methods, and suitable for use directly 
         for any ad hoc requests.
         
-        Manager类的单例，默认的NSURLSessionConfiguration是默认defaultSessionConfiguration
+        Manager类的单例，默认的NSURLSessionConfiguration是defaultSessionConfiguration
     */
     public static let sharedInstance: Manager = {
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
@@ -233,7 +233,10 @@ public class Manager {
         let request = Request(session: session, task: dataTask)
         
         
-        //将Request中的TaskDelegate对象，存入Manager中SessionDelegate对象的subdelegates字典中
+        /**
+         *  将Request中的TaskDelegate对象，存入Manager中SessionDelegate对象的subdelegates字典中
+         *  request.delegate.task == dataTask, request.delegate == DataTaskDelegate
+         */
         delegate[request.delegate.task] = request.delegate
 
         
@@ -270,7 +273,7 @@ public class Manager {
             get {
                 var subdelegate: Request.TaskDelegate?
                 
-                //在同步执行的并行队列只能怪去获取subdelegates字典中的元素
+                //在同步执行的并行队列只能获取subdelegates字典中的元素
                 dispatch_sync(subdelegateQueue) {
                     subdelegate = self.subdelegates[task.taskIdentifier]
                 }

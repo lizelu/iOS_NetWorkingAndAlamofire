@@ -32,6 +32,7 @@ class AlamofireViewController: UIViewController {
         print(unsafeAddressOf(Alamofire.Manager.sharedInstance))
         print(unsafeAddressOf(Alamofire.Manager.sharedInstance))
         print(unsafeAddressOf(Alamofire.Manager.sharedInstance))
+        
     
     }
     
@@ -44,10 +45,14 @@ class AlamofireViewController: UIViewController {
         
         showLog("正在使用Alamofire进行GET请求")
         
+        //let hostString = "http://www.baidu.com"
         let hostString = "https://httpbin.org/get"
         let parameters = ["userId": "1"]
         
         Alamofire.request(.GET, hostString, parameters: parameters)
+            .progress({ (current, total, exp) in
+                print(current)
+            })
             .responseJSON { (response) in
                 if let json = response.result.value {
                     self.showLog("GET字典:\(json)")
@@ -199,6 +204,7 @@ class AlamofireViewController: UIViewController {
                 self.progressView.progress = written/total
             })
         }
+        
     }
     
 
@@ -229,6 +235,7 @@ class AlamofireViewController: UIViewController {
             //返回文件的存储路径及名称
             return directoryURL.URLByAppendingPathComponent(pathComponent!)
             }
+            
             .progress { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite) in
                 
                 self.showLog("\n本次下载：\(bytesWritten)B")
