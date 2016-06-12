@@ -371,7 +371,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         let sessionDataTask = session.dataTaskWithRequest(request) {
             (data, response, error) in
             if data != nil {
-                self.showLog("缓存数据长度 = \((data?.length)!)")
+                self.showLog("数据长度 = \((data?.length)!)")
             }
         }
         
@@ -432,11 +432,11 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     
     /**
      处理证书的策略: NSURLSessionAuthChallengeDisposition
-        NSURLSessionAuthChallengeDisposition -- 使用证书
-        PerformDefaultHandling -- 执行默认处理, 类似于该代理没有被实现一样，credential参数会被忽略
-        CancelAuthenticationChallenge -- 取消请求，credential参数同样会被忽略
-        RejectProtectionSpace -- 拒绝保护空间，重试下一次认证，credential参数同样会被忽略
-        
+        UseCredential： 使用证书
+        PerformDefaultHandling： 执行默认处理, 类似于该代理没有被实现一样，credential参数会被忽略
+        CancelAuthenticationChallenge： 取消请求，credential参数同样会被忽略
+        RejectProtectionSpace： 拒绝保护空间，重试下一次认证，credential参数同样会被忽略
+     
      
     */
     
@@ -452,21 +452,16 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     func URLSession(session: NSURLSession,
                     didReceiveChallenge challenge: NSURLAuthenticationChallenge,
                     completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
-
+        
         let authenticationMethod = challenge.protectionSpace.authenticationMethod   //从保护空间中取出认证方式
-        showLog(authenticationMethod)
         
         if authenticationMethod == NSURLAuthenticationMethodServerTrust {           //从保护空间中取出认证方式
             showLog("服务器信任证书")
             let disposition = NSURLSessionAuthChallengeDisposition.UseCredential    //处理策略
-            
             let credential = NSURLCredential.init(forTrust: challenge.protectionSpace.serverTrust!) //创建证书
-            
             completionHandler(disposition, credential) //证书处理
             return
         }
-        
-        
         /**
          *  HTTP基本认证和数字认证
          *  NSURLCredentialPersistence
@@ -481,7 +476,6 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
             completionHandler(disposition, credential)
             return
         }
-        
         //取消请求
         let disposition = NSURLSessionAuthChallengeDisposition.CancelAuthenticationChallenge
         completionHandler(disposition, nil)
@@ -499,25 +493,28 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
      
      - parameter session:
      - parameter task:
-     - parameter response:
+     - parameter response:  请求的响应头
      - parameter request:   被重定向后的request
-     - parameter completionHandler:
+     - parameter completionHandler: 处理句柄
      */
-    func URLSession(session: NSURLSession, task: NSURLSessionTask, willPerformHTTPRedirection response: NSHTTPURLResponse, newRequest request: NSURLRequest, completionHandler: (NSURLRequest?) -> Void) {
+    func URLSession(session: NSURLSession,
+                    task: NSURLSessionTask,
+                    willPerformHTTPRedirection response: NSHTTPURLResponse,
+                    newRequest request: NSURLRequest,
+                    completionHandler: (NSURLRequest?) -> Void) {
         
         print(response)
         print(request.URL)              //Optional(https://www.xinghuo365.com/index.shtml)
-        print(request.cachePolicy)
-        
+        print(request.cachePolicy)      //NSURLRequestCachePolicy
         
         //可以对重定向后request中的URL进行修改
-//        if let mutableURLRequest: NSMutableURLRequest = request.mutableCopy() as? NSMutableURLRequest {
-//            mutableURLRequest.URL = NSURL(string: "http://www.baidu.com")        //会再次重定向到百度
-//            completionHandler(mutableURLRequest)
-//        }
+        if let mutableURLRequest = request.mutableCopy() as? NSMutableURLRequest {
+            mutableURLRequest.URL = NSURL(string: "http://www.baidu.com") //会再次重定向到百度
+            completionHandler(mutableURLRequest)
+            return
+        }
         
         completionHandler(request)
-        
     }
     
     /**
@@ -544,22 +541,16 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
 
     }
     
-    /**
-     与NSURLSessionDelegate中的下方的回调方法一直，在请求https时会执行下方的方法，因为上方已经实现了
-     NSURLSessionDelegate中相应的方法，所以下方的回调方法在请求https时不会执行。如果将上面NSURLSessionDelegate
-     的相应的方法进行注释掉，将方法体放入到下方的回调方法中，一样可以进行证书认证
-     
-     - parameter session:
-     - parameter task:
-     - parameter challenge:
-     - parameter completionHandler:
-     */
-    func URLSession(session: NSURLSession, task: NSURLSessionTask, didReceiveChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
-        //处理认证想代码，参见上述NSURLSessionDelegate中的对应的方法
+    //处理认证想代码，参见上述NSURLSessionDelegate中的对应的方法
+    func URLSession(session: NSURLSession, task: NSURLSessionTask,
+                    didReceiveChallenge challenge: NSURLAuthenticationChallenge,
+                    completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
     }
     
-    func URLSession(session: NSURLSession, task: NSURLSessionTask, needNewBodyStream completionHandler: (NSInputStream?) -> Void) {
-        
+    func URLSession(session: NSURLSession,
+                    task: NSURLSessionTask,
+                    needNewBodyStream
+        completionHandler: (NSInputStream?) -> Void) {
     }
     
     //任务执行完毕后会执行下方的请求
@@ -578,6 +569,15 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     // MARK -- NSURLSessionDataDelegate===========================
     
     /**
+     * NSURLSessionResponseDisposition
+     *  .Cancel 取消加载，默认为 .Cancel
+     *  .Allow 允许继续操作, 会执行 dataTaskDidReceiveData回调方法
+     *  .BecomeDownload 将请求转变为DownloadTask，会执行NSURLSessionDownloadDelegate
+     *  .BecomeStream 将请求变成StreamTask，会执行NSURLSessionStreamDelegate
+     */
+
+    
+    /**
      收到响应时会执行下方的方法
      
      - parameter session:
@@ -585,28 +585,19 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
      - parameter response:          服务器响应
      - parameter completionHandler: 指定处理响应的策略
      */
-    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveResponse response: NSURLResponse, completionHandler: (NSURLSessionResponseDisposition) -> Void) {
+    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask,
+                    didReceiveResponse response: NSURLResponse,
+                    completionHandler: (NSURLSessionResponseDisposition) -> Void) {
         showLog("响应头：\(response)")
         
-        
-        /**
-         *  .Cancel 取消加载，默认为 .Cancel
-         *  .Allow 允许继续操作, 会执行 dataTaskDidReceiveData回调方法
-         *  .BecomeDownload 将请求转变为DownloadTask，会执行NSURLSessionDownloadDelegate
-         *  .BecomeStream 将请求变成StreamTask，会执行NSURLSessionStreamDelegate
-         */
-        
 //        completionHandler(.Cancel)
-        
-        completionHandler(.Allow)
-        
 //        completionHandler(.BecomeDownload)
-        
+
 //        if #available(iOS 9.0, *) {
 //            completionHandler(.BecomeStream)
-//        } else {
-//            // Fallback on earlier versions
 //        }
+        
+        completionHandler(.Allow)
     }
     
     
@@ -619,10 +610,9 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
      - parameter dataTask:
      - parameter data:     接收的数据
      */
-    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveData data: NSData) {
-        
+    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask,
+                    didReceiveData data: NSData) {
         print(data)
-        
         if let str = String.init(data: data, encoding: NSUTF8StringEncoding) {
             showLog(str)
         }
@@ -636,7 +626,8 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
      - parameter dataTask:
      - parameter downloadTask:
      */
-    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didBecomeDownloadTask downloadTask: NSURLSessionDownloadTask) {
+    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask,
+                    didBecomeDownloadTask downloadTask: NSURLSessionDownloadTask) {
         showLog("任务已经变成DownLoadTask")
     }
     
@@ -644,27 +635,25 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
      *  变成StreamTask会调用下方的方法
      */
     @available(iOS 9.0, *)
-    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didBecomeStreamTask streamTask: NSURLSessionStreamTask) {
+    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask,
+                    didBecomeStreamTask streamTask: NSURLSessionStreamTask) {
         showLog("任务已经变成StreamTask")
     }
     
     
     /**
      将要缓存响应时会触发下述方法
-     
-     - parameter session:
-     - parameter dataTask:
-     - parameter proposedResponse:
-     - parameter completionHandler: 
      */
-    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, willCacheResponse proposedResponse: NSCachedURLResponse, completionHandler: (NSCachedURLResponse?) -> Void) {
+    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask,
+                    willCacheResponse proposedResponse: NSCachedURLResponse,
+                    completionHandler: (NSCachedURLResponse?) -> Void) {
         
         let data = proposedResponse.data
         if let str = String.init(data: data, encoding: NSUTF8StringEncoding) {
             print(str)
         }
         
-        print(proposedResponse.storagePolicy)
+        print(proposedResponse.storagePolicy)   //NSURLCacheStoragePolicy
         print(proposedResponse.userInfo)
         print(proposedResponse.response)
         
@@ -806,10 +795,6 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     
     @available(iOS 9.0, *)
     func URLSession(session: NSURLSession, betterRouteDiscoveredForStreamTask streamTask: NSURLSessionStreamTask) {
-        
-        
-        
-        
     }
     
     @available(iOS 9.0, *)
