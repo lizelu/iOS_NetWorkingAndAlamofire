@@ -114,6 +114,8 @@ extension Request {
         -> Self
     {
         delegate.queue.addOperationWithBlock {
+            
+            //会执行相应解析的Closure
             let result = responseSerializer.serializeResponse(
                 self.request,
                 self.response,
@@ -121,6 +123,7 @@ extension Request {
                 self.delegate.error
             )
 
+            //各种时间的计算
             let requestCompletedTime = self.endTime ?? CFAbsoluteTimeGetCurrent()
             let initialResponseTime = self.delegate.initialResponseTime ?? requestCompletedTime
 
@@ -131,6 +134,7 @@ extension Request {
                 serializationCompletedTime: CFAbsoluteTimeGetCurrent()
             )
 
+            
             let response = Response<T.SerializedObject, T.ErrorObject>(
                 request: self.request,
                 response: self.response,
@@ -139,6 +143,7 @@ extension Request {
                 timeline: timeline
             )
 
+            //response通过回调传递到调用方，completionHandler是用户提供的Closure
             dispatch_async(queue ?? dispatch_get_main_queue()) { completionHandler(response) }
         }
 

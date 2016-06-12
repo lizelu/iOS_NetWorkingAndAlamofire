@@ -54,6 +54,8 @@ class AlamofireViewController: UIViewController {
                 print(current)
             })
             .responseJSON { (response) in
+            
+                debugPrint(response)
                 if let json = response.result.value {
                     self.showLog("GET字典:\(json)")
                 }
