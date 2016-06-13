@@ -137,7 +137,7 @@ extension Request {
     {
         delegate.queue.addOperationWithBlock {
             
-            //会执行相应解析的Closure
+            ///会执行相应解析的Closure, 将网络请求的数据进行解析，并返回解析结果(Result泛型对象)
             let result = responseSerializer.serializeResponse(
                 self.request,
                 self.response,
@@ -157,6 +157,7 @@ extension Request {
             )
 
             
+            //将上述已经解析的数据和时间与原来的相应报文进行重组，生成Response对象
             let response = Response<T.SerializedObject, T.ErrorObject>(
                 request: self.request,
                 response: self.response,
@@ -165,7 +166,7 @@ extension Request {
                 timeline: timeline
             )
 
-            //response通过回调传递到调用方，completionHandler是用户提供的Closure
+            //通过completionHandler回调闭包块，将response对象回传给用户
             dispatch_async(queue ?? dispatch_get_main_queue()) { completionHandler(response) }
         }
 
@@ -177,6 +178,11 @@ extension Request {
 
 
 
+
+
+
+// MARK: - 各种解析方案，便于扩展，每一个Request的延展就是一种解析方案
+//只要遵循ResponseSerializer协议，就可以扩充解析方案
 
 // MARK: - Data---二进制解析
 
@@ -327,6 +333,7 @@ extension Request {
         
         /**
          *  实例化 ResponseSerializer 对象，参数serializeResponse就是后边的闭包
+         *  将解析后的数据存入Result枚举中并返回枚举值
          */
         return ResponseSerializer { _, response, data, error in
             guard error == nil else { return .Failure(error!) }

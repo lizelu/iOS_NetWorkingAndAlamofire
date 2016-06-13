@@ -35,6 +35,7 @@ extension Manager {
         var uploadTask: NSURLSessionUploadTask!
         var HTTPBodyStream: NSInputStream?
 
+        //根据不同的上传数据创建不同的uploadTask
         switch uploadable {
         case .Data(let request, let data):
             dispatch_sync(queue) {
@@ -52,6 +53,7 @@ extension Manager {
             HTTPBodyStream = stream
         }
 
+        //创建Request对象，并设置任务代理
         let request = Request(session: session, task: uploadTask)
 
         if HTTPBodyStream != nil {
