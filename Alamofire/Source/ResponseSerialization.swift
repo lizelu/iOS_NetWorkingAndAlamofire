@@ -48,12 +48,22 @@ public protocol ResponseSerializerType {
     A generic `ResponseSerializerType` used to serialize a request, response, and data into a serialized object.
 */
 public struct ResponseSerializer<Value, Error: ErrorType>: ResponseSerializerType {
+    
+    
+    /***
+      *  下方这两个typealiast可以不写，但是为了代码良好的阅读性可以进行添加
+      *   Value这个泛型等效于ResponseSerializerType协议中的SerializedObject
+      *   Error 等效于ResponseSerializerType协议中的ErrorObject
+      */
     /// The type of serialized object to be created by this `ResponseSerializer`.
     public typealias SerializedObject = Value
 
     /// The type of error to be created by this `ResponseSerializer` if serialization fails.
     public typealias ErrorObject = Error
 
+    //====================================================================
+    
+    
     /**
         A closure used by response handlers that takes a request, response, data and error and returns a result.
     */
@@ -83,6 +93,7 @@ extension Request {
 
         - returns: The request.
     */
+    //该方法负责将数据解析的Closure放到主线程中去执行
     public func response(
         queue queue: dispatch_queue_t? = nil,
         completionHandler: (NSURLRequest?, NSHTTPURLResponse?, NSData?, NSError?) -> Void)
@@ -96,6 +107,8 @@ extension Request {
 
         return self
     }
+    
+    
 
     /**
         Adds a handler to be called once the request has finished.
@@ -107,6 +120,15 @@ extension Request {
 
         - returns: The request.
     */
+    /**
+     根据传入的responseSerializer闭包来解析请求到的网络数据
+     
+     - parameter queue:              处理响应的线程队列，默认是主队列
+     - parameter responseSerializer: 解析响应数据的闭包块，如果是JOSN解析就传入JOSN相应的解析块，支持Data，String，JSON等解析
+     - parameter completionHandler:  将解析后的结果进一步进行组织，通过completionHandler闭包，回调给用户使用
+     
+     - returns: 返回当前对象，便于链式调用
+     */
     public func response<T: ResponseSerializerType>(
         queue queue: dispatch_queue_t? = nil,
         responseSerializer: T,
@@ -151,7 +173,12 @@ extension Request {
     }
 }
 
-// MARK: - Data
+
+
+
+
+
+// MARK: - Data---二进制解析
 
 extension Request {
 
@@ -192,7 +219,14 @@ extension Request {
     }
 }
 
-// MARK: - String
+
+
+
+
+
+
+
+// MARK: - String--字符串解析
 
 extension Request {
 
@@ -264,7 +298,17 @@ extension Request {
     }
 }
 
-// MARK: - JSON
+
+
+
+
+
+
+
+
+
+
+// MARK: - JSON---JSON解析
 
 extension Request {
 
@@ -302,6 +346,17 @@ extension Request {
                 return .Failure(error as NSError)
             }
         }
+        
+        
+        
+        
+        //上方代码与下方代码等价
+//        let responseSerializer: ResponseSerializer<AnyObject, NSError> =
+//            ResponseSerializer<AnyObject, NSError>(serializeResponse:
+//            {(request, respons, data, error) in
+//                //对数据进行JSON解析
+//            })
+//        return responseSerializer
     }
 
     /**
