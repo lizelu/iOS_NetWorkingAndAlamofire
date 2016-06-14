@@ -119,7 +119,9 @@ stringToDouble.convertible("10.12")
 
 
 
-//运算符重载
+
+
+//运算符重载============-----------===========------
 public enum NetworkReachabilityStatus {
     case Unknown
     case NotReachable
@@ -131,7 +133,7 @@ public enum ConnectionType {
     case WWAN
 }
 
-let netState = NetworkReachabilityStatus.Unknown
+let netState = NetworkReachabilityStatus.Reachable(.EthernetOrWiFi)
 
 
 
@@ -151,7 +153,7 @@ public func ==(lhs: NetworkReachabilityStatus, rhs: NetworkReachabilityStatus) -
 }
 
 
-netState == NetworkReachabilityStatus.Unknown
+netState == NetworkReachabilityStatus.Reachable(.EthernetOrWiFi)
 
 
 
