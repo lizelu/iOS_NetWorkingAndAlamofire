@@ -200,28 +200,47 @@ public class NetworkReachabilityManager {
         listener?(networkReachabilityStatusForFlags(flags))
     }
 
+    
+    
     // MARK: - Internal - Network Reachability Status
-
+    /**
+     将监听网络的Flags转换成自定义的Network Reachability Status： NetworkReachabilityStatus
+     
+     - parameter flags: 网络状态监听所回调的标志
+     
+     - returns: 返回自定义的状态 NetworkReachabilityStatus
+     */
     func networkReachabilityStatusForFlags(flags: SCNetworkReachabilityFlags) -> NetworkReachabilityStatus {
-        guard flags.contains(.Reachable) else { return .NotReachable }
+        guard flags.contains(.Reachable) else {
+            return .NotReachable                //网络不可达
+        }
 
         var networkStatus: NetworkReachabilityStatus = .NotReachable
 
-        if !flags.contains(.ConnectionRequired) { networkStatus = .Reachable(.EthernetOrWiFi) }
+        if !flags.contains(.ConnectionRequired) {
+            networkStatus = .Reachable(.EthernetOrWiFi) //以太网或者WiFi
+        }
 
         if flags.contains(.ConnectionOnDemand) || flags.contains(.ConnectionOnTraffic) {
-            if !flags.contains(.InterventionRequired) { networkStatus = .Reachable(.EthernetOrWiFi) }
+            if !flags.contains(.InterventionRequired) {
+                networkStatus = .Reachable(.EthernetOrWiFi) //以太网或者WiFi
+            }
         }
 
         #if os(iOS)
-            if flags.contains(.IsWWAN) { networkStatus = .Reachable(.WWAN) }
+            if flags.contains(.IsWWAN) {
+                networkStatus = .Reachable(.WWAN)   //蜂窝数据
+            }
         #endif
 
         return networkStatus
     }
 }
 
-// MARK: -
+    
+    
+    
+// MARK: - 运算符重载，使NetworkReachabilityStatus支持==比较
 
 extension NetworkReachabilityManager.NetworkReachabilityStatus: Equatable {}
 

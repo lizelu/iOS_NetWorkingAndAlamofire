@@ -117,3 +117,41 @@ stringToDouble.convertible("10.12")
 
 
 
+
+
+//运算符重载
+public enum NetworkReachabilityStatus {
+    case Unknown
+    case NotReachable
+    case Reachable(ConnectionType)
+}
+
+public enum ConnectionType {
+    case EthernetOrWiFi
+    case WWAN
+}
+
+let netState = NetworkReachabilityStatus.Unknown
+
+
+
+extension NetworkReachabilityStatus: Equatable {}
+public func ==(lhs: NetworkReachabilityStatus, rhs: NetworkReachabilityStatus) -> Bool{
+    //Switch进行元组匹配
+    switch (lhs, rhs) {
+        case (.Unknown, .Unknown):
+            return true
+        case (.NotReachable, .NotReachable):
+            return true
+        case let (.Reachable(lhsConnectionType), .Reachable(rhsConnectionType)):
+            return lhsConnectionType == rhsConnectionType
+        default:
+            return false
+    }
+}
+
+
+netState == NetworkReachabilityStatus.Unknown
+
+
+
