@@ -19,6 +19,8 @@ public enum MethodTest: String {
 class AlamofireViewController: UIViewController {
     @IBOutlet var logTextView: UITextView!
     @IBOutlet var progressView: UIProgressView!
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +34,7 @@ class AlamofireViewController: UIViewController {
         print(unsafeAddressOf(Alamofire.Manager.sharedInstance))
         print(unsafeAddressOf(Alamofire.Manager.sharedInstance))
         print(unsafeAddressOf(Alamofire.Manager.sharedInstance))
+        
         
     
     }
@@ -284,13 +287,24 @@ class AlamofireViewController: UIViewController {
     }
     
     
+    let manager = NetworkReachabilityManager(host: "www.apple.com")
     @IBAction func tapReachabilityButton(sender: AnyObject) {
-        let manager = NetworkReachabilityManager(host: "www.apple.com")
-        
         manager?.listener = { status in
             print("网络状态: \(status)")
+            switch status {
+            case .NotReachable:
+                print("网络不可达")
+            case .Unknown:
+                print("未知状态")
+            case .Reachable(let connectType):
+                switch connectType {
+                case .EthernetOrWiFi:
+                    print("Wifi网络")
+                case .WWAN:
+                    print("蜂窝数据")
+                }
+            }
         }
-        
         manager?.startListening()
     }
     

@@ -46,6 +46,7 @@ extension Manager {
 
         let request = Request(session: session, task: downloadTask)
 
+        //下载完毕后通过destination闭包将下载结果回调给用户
         if let downloadDelegate = request.delegate as? Request.DownloadTaskDelegate {
             downloadDelegate.downloadTaskDidFinishDownloadingToURL = { session, downloadTask, URL in
                 return destination(URL, downloadTask.response as! NSHTTPURLResponse)

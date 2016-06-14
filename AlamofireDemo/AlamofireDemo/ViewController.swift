@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SystemConfiguration
 
 let kFileResumeData = "ResumeData"                  // 存储resumeData的Key
 let keyBackgroundDownload = "backgroundDownload"    //BackgroundSession的标示
@@ -401,6 +402,56 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         
         sessionDataTask.resume()
     }
+    
+    
+    
+    
+    
+    //Network Reachability
+    
+    let reachability = SCNetworkReachabilityCreateWithName(nil, "www.baidu.com")
+    
+    @IBAction func tapSCNetworkReachabilityButton(sender: AnyObject) {
+        //1.创建reachability上下文
+        var context = SCNetworkReachabilityContext(version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
+        
+        //2.设置回调
+        let clouserCallBackEnable = SCNetworkReachabilitySetCallback(reachability!, { (reachability, flags, info) in
+            print("reachability=\(reachability)\ninfo=\(info)\nflags=\(flags)\n")
+            
+            guard flags.contains(SCNetworkReachabilityFlags.Reachable) else {
+                print("网络不可用")
+                return
+            }
+            
+            if !flags.contains(SCNetworkReachabilityFlags.ConnectionRequired) {
+                print("以太网或者WiFi")
+            }
+            
+            if flags.contains(SCNetworkReachabilityFlags.ConnectionOnDemand) ||
+               flags.contains(SCNetworkReachabilityFlags.ConnectionOnTraffic) {
+                if !flags.contains(SCNetworkReachabilityFlags.InterventionRequired) {
+                    print("以太网或者WiFi")
+                }
+            }
+            
+            #if os(iOS)
+                if flags.contains(SCNetworkReachabilityFlags.IsWWAN) {
+                    print("蜂窝数据")
+                }
+            #endif
+        },
+        &context)
+       
+        //3.将reachability添加到执行队列
+        let queueEnable = SCNetworkReachabilitySetDispatchQueue(reachability!,  dispatch_get_main_queue())
+        
+        if clouserCallBackEnable && queueEnable {
+            print("已监听网络状态")
+        }
+    }
+    
+    
     
     
     
