@@ -157,3 +157,29 @@ netState == NetworkReachabilityStatus.Reachable(.EthernetOrWiFi)
 
 
 
+
+
+
+
+
+//=====-----=====动态属性关联======-----=====
+extension NSURLSession {
+    
+    private struct AssociatedKeys {
+        static var AssociatedValueKey = "NSURLSession.AssociatedStringValue"
+    }
+    
+    var associatedStringValue : String? {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKeys.AssociatedValueKey) as? String
+        }
+        set (associateValue) {
+            objc_setAssociatedObject(self, &AssociatedKeys.AssociatedValueKey, associateValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+}
+
+let session = NSURLSession.sharedSession()
+session.associatedStringValue = "associate string value"
+print(session.associatedStringValue)
+
