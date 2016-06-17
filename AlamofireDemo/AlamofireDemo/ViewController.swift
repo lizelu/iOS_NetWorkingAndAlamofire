@@ -132,8 +132,8 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         self.downloadProgressView.progress = 0
          showLog("正在上传数据")
         
-        //let path = NSBundle.mainBundle().pathForResource("upload_image", ofType: "png")
-        let path: String? = "http://d.3987.com/yej_141216/009.jpg"
+        let path = NSBundle.mainBundle().pathForResource("test", ofType: "png")
+        //let path: String? = "http://d.3987.com/yej_141216/009.jpg"
         var imageData : NSData?
         
         
@@ -161,6 +161,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     func uploadTask(parameters: NSData) {
         //let uploadUrlString = "https://httpbin.org/post"
         let uploadUrlString = "http://127.0.0.1/upload.php"
+        
         let url: NSURL = NSURL.init(string: uploadUrlString)!
         
         let request = NSMutableURLRequest.init(URL: url)
@@ -644,11 +645,11 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
 //        completionHandler(.Cancel)
 //        completionHandler(.BecomeDownload)
 
-//        if #available(iOS 9.0, *) {
-//            completionHandler(.BecomeStream)
-//        }
+        if #available(iOS 9.0, *) {
+            completionHandler(.BecomeStream)
+        }
         
-        completionHandler(.Allow)
+        //completionHandler(.Allow)
     }
     
     

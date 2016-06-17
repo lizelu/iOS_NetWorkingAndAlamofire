@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "864"
-            endingLineNumber = "864"
+            startingLineNumber = "865"
+            endingLineNumber = "865"
             landmarkName = "ViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "859"
-            endingLineNumber = "859"
+            startingLineNumber = "860"
+            endingLineNumber = "860"
             landmarkName = "ViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "636"
-            endingLineNumber = "636"
+            startingLineNumber = "637"
+            endingLineNumber = "637"
             landmarkName = "ViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "687"
-            endingLineNumber = "687"
+            startingLineNumber = "688"
+            endingLineNumber = "688"
             landmarkName = "ViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "695"
-            endingLineNumber = "695"
+            startingLineNumber = "696"
+            endingLineNumber = "696"
             landmarkName = "ViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -90,29 +90,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "719"
-            endingLineNumber = "719"
+            startingLineNumber = "720"
+            endingLineNumber = "720"
             landmarkName = "ViewController"
             landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "805"
-            endingLineNumber = "805"
-            landmarkName = "URLSession(_:downloadTask:didResumeAtOffset:expectedTotalBytes:)"
-            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -122,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "841"
-            endingLineNumber = "841"
+            startingLineNumber = "842"
+            endingLineNumber = "842"
             landmarkName = "URLSession(_:writeClosedForStreamTask:)"
             landmarkType = "5">
             <Locations>
@@ -138,11 +122,11 @@
                   moduleName = "AlamofireDemo"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/lizelu/Documents/GitHub/iOS_NetWorkingAndAlamofire/AlamofireDemo/AlamofireDemo/ViewController.swift"
-                  timestampString = "487653439.978175"
+                  timestampString = "487843626.408836"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "841"
-                  endingLineNumber = "841"
+                  startingLineNumber = "842"
+                  endingLineNumber = "842"
                   offsetFromSymbolStart = "203">
                </Location>
                <Location
@@ -153,11 +137,11 @@
                   moduleName = "AlamofireDemo"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/lizelu/Documents/GitHub/iOS_NetWorkingAndAlamofire/AlamofireDemo/AlamofireDemo/ViewController.swift"
-                  timestampString = "487653439.978294"
+                  timestampString = "487843626.40904"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "841"
-                  endingLineNumber = "841"
+                  startingLineNumber = "842"
+                  endingLineNumber = "842"
                   offsetFromSymbolStart = "989">
                </Location>
             </Locations>
@@ -170,11 +154,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "832"
-            endingLineNumber = "832"
+            startingLineNumber = "833"
+            endingLineNumber = "833"
             landmarkName = "ViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -186,11 +170,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "708"
-            endingLineNumber = "708"
+            startingLineNumber = "709"
+            endingLineNumber = "709"
             landmarkName = "URLSession(_:dataTask:willCacheResponse:completionHandler:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -202,11 +186,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487580529.1717"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "391"
-            endingLineNumber = "391"
+            startingLineNumber = "392"
+            endingLineNumber = "392"
             landmarkName = "tapSessionDelegateButton(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -218,28 +202,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "609"
-            endingLineNumber = "609"
+            startingLineNumber = "610"
+            endingLineNumber = "610"
             landmarkName = "URLSession(_:task:didCompleteWithError:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "552"
-            endingLineNumber = "552"
-            landmarkName = "URLSession(_:task:willPerformHTTPRedirection:newRequest:completionHandler:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -276,11 +244,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "617"
-            endingLineNumber = "617"
+            startingLineNumber = "618"
+            endingLineNumber = "618"
             landmarkName = "ViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -292,11 +260,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "614"
-            endingLineNumber = "614"
+            startingLineNumber = "615"
+            endingLineNumber = "615"
             landmarkName = "ViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -324,11 +292,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "461"
-            endingLineNumber = "461"
+            startingLineNumber = "462"
+            endingLineNumber = "462"
             landmarkName = "ViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -340,11 +308,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "743"
-            endingLineNumber = "743"
+            startingLineNumber = "744"
+            endingLineNumber = "744"
             landmarkName = "URLSession(_:downloadTask:didFinishDownloadingToURL:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -356,11 +324,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "465"
-            endingLineNumber = "465"
+            startingLineNumber = "466"
+            endingLineNumber = "466"
             landmarkName = "ViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -372,11 +340,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487580529.1717"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "228"
-            endingLineNumber = "228"
+            startingLineNumber = "229"
+            endingLineNumber = "229"
             landmarkName = "tapPauseButton(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -388,11 +356,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487580529.1717"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "231"
-            endingLineNumber = "231"
+            startingLineNumber = "232"
+            endingLineNumber = "232"
             landmarkName = "tapPauseButton(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -404,11 +372,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "504"
-            endingLineNumber = "504"
+            startingLineNumber = "505"
+            endingLineNumber = "505"
             landmarkName = "URLSession(_:didReceiveChallenge:completionHandler:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -420,11 +388,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "807"
-            endingLineNumber = "807"
+            startingLineNumber = "808"
+            endingLineNumber = "808"
             landmarkName = "ViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -436,11 +404,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "505"
-            endingLineNumber = "505"
+            startingLineNumber = "506"
+            endingLineNumber = "506"
             landmarkName = "URLSession(_:didReceiveChallenge:completionHandler:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -468,11 +436,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "666"
-            endingLineNumber = "666"
+            startingLineNumber = "667"
+            endingLineNumber = "667"
             landmarkName = "URLSession(_:dataTask:didReceiveData:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -548,11 +516,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "428"
-            endingLineNumber = "428"
+            startingLineNumber = "429"
+            endingLineNumber = "429"
             landmarkName = "tapSCNetworkReachabilityButton(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -564,11 +532,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
+            timestampString = "487843507.253994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "423"
-            endingLineNumber = "423"
+            startingLineNumber = "441"
+            endingLineNumber = "441"
             landmarkName = "tapSCNetworkReachabilityButton(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -580,12 +548,108 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AlamofireDemo/ViewController.swift"
-            timestampString = "487653227.619557"
+            timestampString = "487840025.695106"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "440"
-            endingLineNumber = "440"
-            landmarkName = "tapSCNetworkReachabilityButton(_:)"
+            startingLineNumber = "800"
+            endingLineNumber = "800"
+            landmarkName = "URLSession(_:downloadTask:didResumeAtOffset:expectedTotalBytes:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AlamofireDemo/ViewController.swift"
+            timestampString = "487842540.314661"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "508"
+            endingLineNumber = "508"
+            landmarkName = "URLSession(_:didReceiveChallenge:completionHandler:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AlamofireDemo/ViewController.swift"
+            timestampString = "487843239.795269"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "557"
+            endingLineNumber = "557"
+            landmarkName = "URLSession(_:task:willPerformHTTPRedirection:newRequest:completionHandler:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AlamofireDemo/ViewController.swift"
+            timestampString = "487843730.643683"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "469"
+            endingLineNumber = "469"
+            landmarkName = "URLSessionDidFinishEventsForBackgroundURLSession(_:)"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "AlamofireDemo.ViewController.URLSessionDidFinishEventsForBackgroundURLSession (__ObjC.NSURLSession) -&gt; ()"
+                  moduleName = "AlamofireDemo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lizelu/Documents/GitHub/iOS_NetWorkingAndAlamofire/AlamofireDemo/AlamofireDemo/ViewController.swift"
+                  timestampString = "487843730.64544"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "469"
+                  endingLineNumber = "469"
+                  offsetFromSymbolStart = "184">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "AlamofireDemo.ViewController.(URLSessionDidFinishEventsForBackgroundURLSession (__ObjC.NSURLSession) -&gt; ()).(closure #1)"
+                  moduleName = "AlamofireDemo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lizelu/Documents/GitHub/iOS_NetWorkingAndAlamofire/AlamofireDemo/AlamofireDemo/ViewController.swift"
+                  timestampString = "487843730.645577"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "470"
+                  endingLineNumber = "470"
+                  offsetFromSymbolStart = "19">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AlamofireDemo/ViewController.swift"
+            timestampString = "487843783.592284"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "583"
+            endingLineNumber = "583"
+            landmarkName = "URLSession(_:task:didSendBodyData:totalBytesSent:totalBytesExpectedToSend:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
