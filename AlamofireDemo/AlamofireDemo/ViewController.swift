@@ -454,6 +454,21 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     
     
     
+    @IBAction func tapCacheTestButton(sender: AnyObject) {
+        let fileUrl: NSURL? = NSURL(string: "http://127.0.0.1/test2.php")
+        
+        let requestFile: NSMutableURLRequest = NSMutableURLRequest(URL: fileUrl!)
+        
+        requestFile.cachePolicy = .UseProtocolCachePolicy  //指定缓存策略
+        
+        //使用NSURLSessionDataDelegate处理相应数据
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let sessionWithDelegate = NSURLSession.init(configuration: sessionConfig, delegate: self, delegateQueue: nil)
+        let sessionDataTask = sessionWithDelegate.dataTaskWithRequest(requestFile)
+        
+        sessionDataTask.resume()
+
+    }
     
     
 
@@ -561,7 +576,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         
         //可以对重定向后request中的URL进行修改
         if let mutableURLRequest = request.mutableCopy() as? NSMutableURLRequest {
-            mutableURLRequest.URL = NSURL(string: "http://www.baidu.com") //会再次重定向到百度
+            mutableURLRequest.URL = NSURL(string: "http://www.baidu.com") //会再次重定向到本地
             completionHandler(mutableURLRequest)
             return
         }
@@ -645,11 +660,11 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
 //        completionHandler(.Cancel)
 //        completionHandler(.BecomeDownload)
 
-        if #available(iOS 9.0, *) {
-            completionHandler(.BecomeStream)
-        }
+//        if #available(iOS 9.0, *) {
+//            completionHandler(.BecomeStream)
+//        }
         
-        //completionHandler(.Allow)
+        completionHandler(.Allow)
     }
     
     
@@ -710,7 +725,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         print(proposedResponse.response)
         
         //对缓存响应进行处理
-        completionHandler(proposedResponse)
+ //       completionHandler(proposedResponse)
     }
     
     
