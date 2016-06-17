@@ -115,16 +115,23 @@ extension NSURLSession {
     - CustomEvaluation:         Uses the associated closure to evaluate the validity of the server trust.
 */
 public enum ServerTrustPolicy {
+    //默认鉴定
     case PerformDefaultEvaluation(validateHost: Bool)
+    //固定证书
     case PinCertificates(certificates: [SecCertificate], validateCertificateChain: Bool, validateHost: Bool)
+    //固定公钥
     case PinPublicKeys(publicKeys: [SecKey], validateCertificateChain: Bool, validateHost: Bool)
+    //不使用鉴定
     case DisableEvaluation
+    //自定义鉴定
     case CustomEvaluation((serverTrust: SecTrust, host: String) -> Bool)
 
     // MARK: - Bundle Location
 
     /**
         Returns all certificates within the given bundle with a `.cer` file extension.
+     
+        ============遍历获取Boundle所有的证书==========
 
         - parameter bundle: The bundle to search for all `.cer` files.
 
@@ -151,6 +158,8 @@ public enum ServerTrustPolicy {
 
     /**
         Returns all public keys within the given bundle with a `.cer` file extension.
+     
+        ========遍历获取的证书，获取每个证书的publicKey-公钥===============
 
         - parameter bundle: The bundle to search for all `*.cer` files.
 
@@ -291,6 +300,13 @@ public enum ServerTrustPolicy {
         return publicKeys
     }
 
+    /**
+     获取证书的公钥
+     
+     - parameter certificate: 相应的证书
+     
+     - returns: 
+     */
     private static func publicKeyForCertificate(certificate: SecCertificate) -> SecKey? {
         var publicKey: SecKey?
 

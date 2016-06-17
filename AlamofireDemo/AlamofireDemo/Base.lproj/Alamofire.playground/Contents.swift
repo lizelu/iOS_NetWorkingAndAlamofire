@@ -2,7 +2,7 @@
 
 import UIKit
 
-//使用协议扩展进行数据类型的转换=======-------========-------========---------==========
+//使用协议扩展进行数据类型的转换
 protocol BaseNumberStringConvertible {
     var intValue: Int? { get }
     var doubleValue: Double? { get }
@@ -26,11 +26,72 @@ extension String: BaseNumberStringConvertible {
     }
 }
 
-
 var numberString = "1.22"
 numberString.intValue
 numberString.floatValue
 numberString.doubleValue
+
+
+
+
+//下标属性的使用==========------------=========
+class CustomUserData {
+    let userId: Int
+    let userName: String
+    init(userId: Int, userName: String) {
+        self.userId = userId
+        self.userName = userName
+    }
+}
+
+//定义下标
+class SubscriptClassTest {
+    var userInfo: [Int : String] = [:]
+    
+    subscript(userData: CustomUserData) -> String? {
+        get {
+            return userInfo[userData.userId]
+        }
+        
+        set {
+            userInfo[userData.userId] = newValue
+        }
+    }
+}
+
+let myData = CustomUserData(userId: 000001, userName: "ZeluLi")
+
+let testSubscript = SubscriptClassTest()
+
+testSubscript[myData] = myData.userName
+
+testSubscript[myData]
+
+
+
+
+class MySubscriptClass {
+    
+    var value : String = "default"
+    
+    subscript(myValue: String) -> String {
+        get {
+            return value
+        }
+        set {
+            value = newValue  //newValue代表着所赋的值
+        }
+    }
+}
+
+let mySubscriptObj = MySubscriptClass()
+
+mySubscriptObj["key"] = "Vlaue1"
+mySubscriptObj.value
+
+mySubscriptObj.value = "Vlaue2"
+mySubscriptObj["key"]
+
 
 
 
@@ -182,4 +243,7 @@ extension NSURLSession {
 let session = NSURLSession.sharedSession()
 session.associatedStringValue = "associate string value"
 print(session.associatedStringValue)
+
+
+
 

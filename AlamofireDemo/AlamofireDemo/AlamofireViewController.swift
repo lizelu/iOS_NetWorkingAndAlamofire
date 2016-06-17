@@ -36,9 +36,59 @@ class AlamofireViewController: UIViewController {
         print(unsafeAddressOf(Alamofire.Manager.sharedInstance))
         
         
-    
+        print(publicKeysInBundle())
     }
     
+    func publicKeysInBundle(bundle: NSBundle = NSBundle.mainBundle()) -> [SecKey] {
+        var publicKeys: [SecKey] = []
+        
+        for certificate in certificatesInBundle(bundle) {
+            if let publicKey = publicKeyForCertificate(certificate) {
+                publicKeys.append(publicKey)
+            }
+        }
+        
+        return publicKeys
+    }
+
+    
+    
+    func certificatesInBundle(bundle: NSBundle = NSBundle.mainBundle()) -> [SecCertificate] {
+        var certificates: [SecCertificate] = []
+        
+        let paths = Set([".cer", ".CER", ".crt", ".CRT", ".der", ".DER"].map { fileExtension in
+            bundle.pathsForResourcesOfType(fileExtension, inDirectory: nil)
+            }.flatten())
+        
+        for path in paths {
+            if let
+                certificateData = NSData(contentsOfFile: path),
+                certificate = SecCertificateCreateWithData(nil, certificateData)
+            {
+                certificates.append(certificate)
+            }
+        }
+        
+        return certificates
+    }
+    
+    
+    func publicKeyForCertificate(certificate: SecCertificate) -> SecKey? {
+        var publicKey: SecKey?
+        
+        let policy = SecPolicyCreateBasicX509()
+        var trust: SecTrust?
+        let trustCreationStatus = SecTrustCreateWithCertificates(certificate, policy, &trust)
+        
+        if let trust = trust where trustCreationStatus == errSecSuccess {
+            publicKey = SecTrustCopyPublicKey(trust)
+        }
+        
+        return publicKey
+    }
+
+
+
     
     /**
      使用Alamofire进行GET请求

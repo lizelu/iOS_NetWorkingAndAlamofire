@@ -16,6 +16,7 @@
 		F4AC3B3C1CE96D3A00F65285 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4AC3B2F1CE96D1A00F65285 /* Alamofire.framework */; };
 		F4AC3B3D1CE96D3A00F65285 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F4AC3B2F1CE96D1A00F65285 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F4D139361CFFDDC1009B7653 /* test.png in Resources */ = {isa = PBXBuildFile; fileRef = F4D139351CFFDDC1009B7653 /* test.png */; };
+		F4F733931D10FD7E00D5B320 /* AppleWWDRCA.cer in Resources */ = {isa = PBXBuildFile; fileRef = F4F733921D10FD7E00D5B320 /* AppleWWDRCA.cer */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,6 +104,7 @@
 		F4AC3B1E1CE96D0000F65285 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F4AC3B241CE96D1A00F65285 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = ../../Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
 		F4D139351CFFDDC1009B7653 /* test.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = test.png; path = ../test.png; sourceTree = "<group>"; };
+		F4F733921D10FD7E00D5B320 /* AppleWWDRCA.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = AppleWWDRCA.cer; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +143,7 @@
 				F4AC3B141CE96D0000F65285 /* ViewController.swift */,
 				F45409CC1CED6D7B00F190C0 /* AlamofireViewController.swift */,
 				F4AC3B161CE96D0000F65285 /* Main.storyboard */,
+				F4F733921D10FD7E00D5B320 /* AppleWWDRCA.cer */,
 				F4AC3B191CE96D0000F65285 /* Assets.xcassets */,
 				F4D139351CFFDDC1009B7653 /* test.png */,
 				F4AC3B1B1CE96D0000F65285 /* LaunchScreen.storyboard */,
@@ -283,6 +286,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4AC3B1D1CE96D0000F65285 /* LaunchScreen.storyboard in Resources */,
+				F4F733931D10FD7E00D5B320 /* AppleWWDRCA.cer in Resources */,
 				F4D139361CFFDDC1009B7653 /* test.png in Resources */,
 				F4AC3B1A1CE96D0000F65285 /* Assets.xcassets in Resources */,
 				F4AC3B181CE96D0000F65285 /* Main.storyboard in Resources */,

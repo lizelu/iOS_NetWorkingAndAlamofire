@@ -43,7 +43,7 @@ public class Manager {
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
         configuration.HTTPAdditionalHeaders = Manager.defaultHTTPHeaders
 
-        print(Manager.defaultHTTPHeaders)
+        //print(Manager.defaultHTTPHeaders)
         
         return Manager(configuration: configuration)
     }()
@@ -232,13 +232,11 @@ public class Manager {
 
         let request = Request(session: session, task: dataTask)
         
-        
         /**
          *  将Request中的TaskDelegate对象，存入Manager中SessionDelegate对象的subdelegates字典中
          *  request.delegate.task == dataTask, request.delegate == DataTaskDelegate
          */
         delegate[request.delegate.task] = request.delegate
-
         
         //是否立即发起网络请求，默认为true
         if startRequestsImmediately {
