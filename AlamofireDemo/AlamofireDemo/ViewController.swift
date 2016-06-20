@@ -22,6 +22,8 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     var downloadTask: NSURLSessionDownloadTask? = nil
     var downloadSession: NSURLSession? = nil
     
+    var etag: String? = nil
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -455,7 +457,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     
     
     @IBAction func tapCacheTestButton(sender: AnyObject) {
-        let fileUrl: NSURL? = NSURL(string: "http://127.0.0.1/test2.php")
+        let fileUrl: NSURL? = NSURL(string: "http://127.0.0.1/test.html")
         
         let requestFile: NSMutableURLRequest = NSMutableURLRequest(URL: fileUrl!)
         
@@ -656,6 +658,33 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
                     didReceiveResponse response: NSURLResponse,
                     completionHandler: (NSURLSessionResponseDisposition) -> Void) {
         showLog("响应头：\(response)")
+
+        guard let httpResponse = response as? NSHTTPURLResponse else {
+           return
+        }
+        
+        guard let etag = httpResponse.allHeaderFields["Etag"] as? String else {
+            return
+        }
+        
+        
+        if self.etag == nil {
+            self.etag = etag
+        } else {
+            
+            if self.etag == etag {
+                completionHandler(.Cancel)
+                
+                
+                
+            } else {
+                completionHandler(.Allow)
+            }
+            
+        }
+
+        
+        
         
 //        completionHandler(.Cancel)
 //        completionHandler(.BecomeDownload)
